@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.team.supplychain.controllers.DashboardController"
+            fx:id="mainContainer"
+            prefHeight="700.0" prefWidth="1200.0"
+            stylesheets="@../css/styles.css">
+    
+    <!-- Top Bar -->
+    <top>
+        <HBox styleClass="top-bar" alignment="CENTER_LEFT" spacing="20">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+            
+            <Label text="Supply Chain Management System" styleClass="app-title">
+                <font>
+                    <Font name="System Bold" size="20.0" />
+                </font>
+            </Label>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <VBox alignment="CENTER_RIGHT" spacing="2">
+                <Label fx:id="welcomeLabel" text="Welcome, User!" styleClass="welcome-text">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Label fx:id="roleLabel" text="Role: Employee" styleClass="role-text">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+            </VBox>
+            
+            <Button fx:id="logoutButton" text="Logout" styleClass="logout-button" 
+                    onAction="#handleLogout">
+                <font>
+                    <Font size="12.0" />
+                </font>
+            </Button>
+        </HBox>
+    </top>
+    
+    <!-- Left Sidebar Menu -->
+    <left>
+        <VBox styleClass="sidebar" spacing="10" prefWidth="250">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+            
+            <Label text="MAIN MENU" styleClass="menu-header">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10"/>
+                </VBox.margin>
+            </Label>
+            
+            <Button fx:id="inventoryButton" text="📦 Inventory" 
+                    styleClass="menu-button" onAction="#handleInventory" 
+                    maxWidth="Infinity">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            
+            <Button fx:id="suppliersButton" text="🏭 Suppliers" 
+                    styleClass="menu-button" onAction="#handleSuppliers" 
+                    maxWidth="Infinity">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            
+            <Button fx:id="employeesButton" text="👥 Employees" 
+                    styleClass="menu-button" onAction="#handleEmployees" 
+                    maxWidth="Infinity">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            
+            <Button fx:id="attendanceButton" text="⏰ Attendance" 
+                    styleClass="menu-button" onAction="#handleAttendance" 
+                    maxWidth="Infinity">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            
+            <Button fx:id="purchaseOrdersButton" text="📋 Purchase Orders" 
+                    styleClass="menu-button" onAction="#handlePurchaseOrders" 
+                    maxWidth="Infinity">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            
+            <Separator/>
+            
+            <Button fx:id="reportsButton" text="📊 Reports" 
+                    styleClass="menu-button" onAction="#handleReports" 
+                    maxWidth="Infinity">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            
+            <Button fx:id="settingsButton" text="⚙️ Settings" 
+                    styleClass="menu-button" onAction="#handleSettings" 
+                    maxWidth="Infinity">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <Label fx:id="userInfoLabel" text="user@email.com" 
+                   styleClass="user-info" wrapText="true">
+                <font>
+                    <Font size="10.0" />
+                </font>
+            </Label>
+        </VBox>
+    </left>
+    
+    <!-- Center Content Area -->
+    <center>
+        <StackPane styleClass="content-area">
+            <VBox alignment="CENTER" spacing="20">
+                <Label text="Welcome to Supply Chain Management System" styleClass="welcome-message">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                
+                <Label text="Select a module from the menu to get started" styleClass="subtitle">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                
+                <!-- Dashboard Statistics (Optional) -->
+                <GridPane hgap="20" vgap="20" alignment="CENTER">
+                    <padding>
+                        <Insets top="40"/>
+                    </padding>
+                    
+                    <VBox styleClass="stat-card" alignment="CENTER" spacing="10" 
+                          GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <padding>
+                            <Insets top="20" right="40" bottom="20" left="40"/>
+                        </padding>
+                        <Label text="📦" styleClass="stat-icon">
+                            <font>
+                                <Font size="36.0" />
+                            </font>
+                        </Label>
+                        <Label text="Inventory Items" styleClass="stat-label"/>
+                        <Label text="0" styleClass="stat-value">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox styleClass="stat-card" alignment="CENTER" spacing="10"
+                          GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <padding>
+                            <Insets top="20" right="40" bottom="20" left="40"/>
+                        </padding>
+                        <Label text="👥" styleClass="stat-icon">
+                            <font>
+                                <Font size="36.0" />
+                            </font>
+                        </Label>
+                        <Label text="Employees" styleClass="stat-label"/>
+                        <Label text="0" styleClass="stat-value">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox styleClass="stat-card" alignment="CENTER" spacing="10"
+                          GridPane.columnIndex="2" GridPane.rowIndex="0">
+                        <padding>
+                            <Insets top="20" right="40" bottom="20" left="40"/>
+                        </padding>
+                        <Label text="🏭" styleClass="stat-icon">
+                            <font>
+                                <Font size="36.0" />
+                            </font>
+                        </Label>
+                        <Label text="Suppliers" styleClass="stat-label"/>
+                        <Label text="0" styleClass="stat-value">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+                </GridPane>
+            </VBox>
+        </StackPane>
+    </center>
+    
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox styleClass="status-bar" alignment="CENTER_LEFT" spacing="20">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            
+            <Label text="Status: Online" styleClass="status-text">
+                <font>
+                    <Font size="11.0" />
+                </font>
+            </Label>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label text="© 2025 Supply Chain Management System" styleClass="copyright-text">
+                <font>
+                    <Font size="10.0" />
+                </font>
+            </Label>
+        </HBox>
+    </bottom>
+    
+</BorderPane>
