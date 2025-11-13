@@ -1,0 +1,9 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "maven.executable.path": "mvn",
+    "java.debug.settings.onBuildFailureProceed": true,
+    "files.exclude": {
+        "**/target": true
+    }
+}
