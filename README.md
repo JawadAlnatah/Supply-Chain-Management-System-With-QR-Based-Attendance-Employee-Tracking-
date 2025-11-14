@@ -253,7 +253,7 @@ Before you start, make sure you have:
 cd Desktop
 
 # Clone the project
-git clone https://github.com/JawadAlnatah/Integrated-Supply-Chain-Management-System-with-QR-Based-Employee-Attendance-Tracking-.git
+git clone https://github.com/JawadAlnatah/Supply-Chain-Management-System-With-QR-Based-Attendance-Employee-Tracking-.git
 
 # Navigate into project folder
 cd Supply-Chain-Management-System-With-QR-Based-Attendance-Employee-Tracking-
