@@ -314,37 +314,6 @@ mvn javafx:run
 
 ---
 
-### Method 2: Using Batch File (Easy Way)
-
-1. **Create `run.bat` in project root:**
-   ```batch
-   @echo off
-   title Supply Chain Management System
-   echo Starting application...
-   mvn javafx:run
-   pause
-   ```
-
-2. **Double-click `run.bat` to run!**
-
----
-
-### Method 3: Using VSCode
-
-1. **Install Extensions:**
-   - Extension Pack for Java (by Microsoft)
-   - Maven for Java (by Microsoft)
-
-2. **Open project in VSCode:**
-   ```
-   File → Open Folder → Select project folder
-   ```
-
-3. **Press `Ctrl + Shift + P`:**
-   - Type: "Run Task"
-   - Select: "Maven: javafx:run"
-
----
 
 ## 🔐 Login Credentials
 
@@ -446,7 +415,7 @@ Use these credentials to test the application:
 
 1. **Clone the repository:**
    ```powershell
-   git clone https://github.com/JawadAlnatah/Integrated-Supply-Chain-Management-System-with-QR-Based-Employee-Attendance-Tracking-.git
+   git https://github.com/JawadAlnatah/Supply-Chain-Management-System-With-QR-Based-Attendance-Employee-Tracking-.git
    cd Supply-Chain-Management-System-With-QR-Based-Attendance-Employee-Tracking-
    ```
 
