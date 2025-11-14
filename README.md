@@ -10,7 +10,7 @@ An integrated JavaFX desktop application that combines supply chain management w
 
 | Name | Student ID | Role |
 |------|-----------|------|
-| Jawad Ali Alnatah | 2240002923 | Team Leader & Backend Developer |
+| Jawad Ali Alnatah | 2240002923 | Team Leader & Full Stack Developer |
 | Mustafa AbdulKarim AbdRabAlameer | 2240002959 | Backend Developer & Database Designer |
 | Abdullah Jaffer Masiri | 2240004545 | UI/UX Designer |
 | Ahmed Hussain Alghazwe | 2240002359 | Frontend Developer |
