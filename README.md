@@ -737,7 +737,7 @@ By Week 16, our application should:
 choco install maven -y
 
 # 2. Clone repo
-git clone https://github.com/JawadAlnatah/Integrated-Supply-Chain-Management-System-with-QR-Based-Employee-Attendance-Tracking-.git
+git clone https://github.com/JawadAlnatah/Supply-Chain-Management-System-With-QR-Based-Attendance-Employee-Tracking-.git
 
 # 3. Navigate to project
 cd Supply-Chain-Management-System-With-QR-Based-Attendance-Employee-Tracking-
@@ -755,10 +755,3 @@ mvn javafx:run
 
 ---
 
-**Last Updated:** November 13, 2025  
-**Project Status:** 🟢 Active Development  
-**Current Phase:** Week 10 - Core Development
-
----
-
-*Made with ❤️ by Team 6 - CSC 305*
