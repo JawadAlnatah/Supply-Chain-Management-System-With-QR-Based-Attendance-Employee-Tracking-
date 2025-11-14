@@ -626,37 +626,9 @@ mvn clean install
 
 ---
 
-## 📞 Support
-
-### Team Communication
-
-- **Primary:** WhatsApp Group
-- **Code Reviews:** GitHub Pull Requests
-- **Documentation:** Google Drive (shared folder)
-- **Meetings:** Weekly (TBD)
-
-### Getting Help
-
-1. **Check this README first**
-2. **Search in GitHub Issues**
-3. **Ask in team WhatsApp group**
-4. **Contact Team Leader:** Jawad Ali Alnatah
-5. **Office Hours:** Dr. Rahma Ahmed / Saeed Matar Alshahrani
-
----
-
 ## ⚖️ License
 
 This project is for educational purposes as part of CSC 305: Software Engineering course at Imam Abdulrahman Bin Faisal University.
-
----
-
-## 🙏 Acknowledgments
-
-- **Course Instructor:** Dr. Rahma Ahmed
-- **Project Advisor:** Saeed Matar Alshahrani
-- **University:** Imam Abdulrahman Bin Faisal University
-- **College:** Computer Science and Information Technology
 
 ---
 
