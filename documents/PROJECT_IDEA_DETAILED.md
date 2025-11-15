@@ -1,7 +1,7 @@
 # Fresh Dairy Co. - Supply Chain Management System
 ## Comprehensive Project Idea Document
 
-**Version:** 1.0
+**Version:** 1.1
 **Last Updated:** November 15, 2025
 **Course:** CSC 305 - Software Engineering
 **Team:** Supply Chain Management Team
@@ -114,10 +114,11 @@ Dairy Farms → [FRESH DAIRY CO.] → Retailers/Grocers → Consumers
    - Runs on Windows/Mac/Linux workstations
 
 2. **Web Scanner Interface (HTML5)**
-   - Mobile-friendly web page for employee attendance
-   - QR code scanner using device camera
+   - Used by security guard at main gate entrance
+   - QR code scanner using device camera (tablet or smartphone)
+   - Displays employee verification screen with photo after scan
+   - Guard confirms identity before recording attendance
    - Lightweight, works on any smartphone or tablet
-   - Records check-in/check-out timestamps
 
 3. **Cloud Database (TiDB/MySQL)**
    - Centralized data storage
@@ -131,7 +132,8 @@ The key innovation is **tight integration between supply chain operations and wo
 
 - Warehouse managers see both inventory levels AND which employees are on-site
 - Real-time attendance data helps explain productivity variations
-- QR attendance system enforces hygiene protocols (no shared touch surfaces)
+- QR attendance system with security guard verification prevents time fraud
+- Photo-based identity verification ensures only authorized employees enter
 - All data unified in single system for comprehensive reporting
 
 ---
@@ -172,6 +174,7 @@ The key innovation is **tight integration between supply chain operations and wo
 - **Quality Control Inspectors:** Product testing, safety compliance
 - **Inventory Managers:** Stock oversight, reordering decisions
 - **Delivery Drivers:** Transport finished goods to retailers
+- **Security Guards:** Gate control, employee attendance verification
 - **Administrators:** System management, user accounts
 
 #### Attendance
@@ -262,10 +265,11 @@ The key innovation is **tight integration between supply chain operations and wo
 - Manual timesheets sometimes lost, affecting payroll
 
 **How Our System Helps:**
-- Personal QR code (printed badge or phone app)
-- Scan QR at any scanner station - instant check-in
-- No shared touch surfaces (contactless)
-- Attendance instantly recorded, no delays
+- Personal QR code on printed badge
+- Security guard scans badge at gate - quick verification
+- Guard sees employee photo for identity confirmation
+- No buddy-punching possible (guard verifies visually)
+- Attendance instantly recorded after guard approval
 
 ### Persona 3: Dr. Fatima - Quality Control Inspector
 
@@ -316,6 +320,33 @@ The key innovation is **tight integration between supply chain operations and wo
 - User management interface for account creation/deactivation
 - Centralized configuration via admin dashboard
 - System logs for security auditing
+
+### Persona 5: Hassan - Security Guard
+
+**Demographics:**
+- Age: 45
+- Role: Security Guard (stationed at main gate)
+- Experience: 15 years in security
+- Tech Proficiency: Basic-Moderate (smartphone user)
+
+**Goals:**
+- Verify employee identity before allowing entry
+- Prevent unauthorized access to facility
+- Quickly process employees during shift changes
+- Maintain security logs
+
+**Pain Points:**
+- Manual logbook is slow and error-prone
+- Can't verify if person matches the badge photo (no photos on old badges)
+- Difficult to spot fake or stolen badges
+- Handwriting illegible, causing payroll issues
+
+**How Our System Helps:**
+- Tablet with web scanner at gate (easy to use)
+- After scanning QR, employee photo appears instantly for visual verification
+- One-tap confirm or deny buttons
+- Denied entries automatically notify manager
+- No manual logbook needed, all digital
 
 ---
 
@@ -392,22 +423,30 @@ The key innovation is **tight integration between supply chain operations and wo
 | Requirement ID | Description | Priority |
 |---------------|-------------|----------|
 | ATT-001 | Generate unique QR code for each employee | Must-Have |
-| ATT-002 | Web-based QR scanner accessible on smartphones/tablets | Must-Have |
-| ATT-003 | Record check-in timestamp when QR scanned (status: Checked In) | Must-Have |
-| ATT-004 | Record check-out timestamp when QR scanned again (status: Checked Out) | Must-Have |
+| ATT-002 | Web-based QR scanner for security guard at gate (tablet/smartphone) | Must-Have |
+| ATT-002b | Display employee verification screen with photo after QR scan | Must-Have |
+| ATT-002c | Security guard confirmation required before attendance recorded | Must-Have |
+| ATT-003 | Record check-in timestamp only after guard confirms (status: Checked In) | Must-Have |
+| ATT-004 | Record check-out timestamp when guard confirms exit scan (status: Checked Out) | Must-Have |
 | ATT-005 | Display current on-site employees in real-time | Must-Have |
 | ATT-006 | Flag late arrivals based on configurable shift start times | Should-Have |
 | ATT-007 | View attendance history per employee (date range filter) | Must-Have |
 | ATT-008 | Export attendance data for payroll (CSV/Excel) | Should-Have |
 | ATT-009 | Manual attendance override for admins (handle scanner issues) | Should-Have |
+| ATT-010 | Deny check-in option with manager notification for security incidents | Must-Have |
 
 **Attendance Workflow:**
-1. Admin generates QR code for new employee
-2. QR code printed on employee badge or saved to phone
-3. Employee arrives, opens web scanner on phone/tablet
-4. Scans QR code → instant check-in recorded with timestamp
-5. At end of shift, scans again → check-out recorded
-6. Manager views attendance dashboard showing all on-site employees
+1. Admin generates QR code for new employee and uploads employee photo
+2. QR code printed on employee badge
+3. Employee arrives at main gate with badge
+4. Security guard (stationed at gate) scans employee's QR badge using tablet
+5. System displays verification screen with employee photo, name, department, position
+6. Guard visually verifies identity matches the photo
+7. Guard taps "Confirm Check-In" → attendance recorded with timestamp
+8. Employee proceeds into facility
+9. At end of shift, employee exits through gate, guard scans badge again
+10. Guard confirms check-out → system records exit timestamp
+11. Manager views attendance dashboard showing all on-site employees in real-time
 
 **Attendance Statuses:**
 - **Checked In:** Employee on-site
@@ -428,11 +467,13 @@ The key innovation is **tight integration between supply chain operations and wo
 | EMP-005 | View employee list with search and filter capabilities | Must-Have |
 | EMP-006 | Update employee details | Must-Have |
 | EMP-007 | Deactivate employees (soft delete - retain for history) | Must-Have |
+| EMP-008 | Upload and store employee photo (cloud URL) for QR verification | Must-Have |
 
 **Employee Departments:**
 - Warehouse Operations
 - Quality Control
 - Inventory Management
+- Security
 - Administration
 
 ### 6.6 Reporting & Dashboard
@@ -484,38 +525,106 @@ The key innovation is **tight integration between supply chain operations and wo
 
 ## 7. Detailed Use Cases
 
-### Use Case 1: QR-Based Employee Attendance
+### Use Case 1: QR-Based Employee Attendance with Security Verification
 
-**Actor:** Ahmed (Warehouse Employee)
-**Precondition:** Ahmed has been issued a QR code by admin
-**Trigger:** Ahmed arrives for his shift
+**Actors:**
+- Primary: Hassan (Security Guard at main gate)
+- Secondary: Ahmed (Warehouse Employee)
+
+**Precondition:**
+- Ahmed has been issued a QR code badge by admin
+- Ahmed's photo uploaded to system
+- Hassan has tablet with web scanner at gate entrance
+
+**Trigger:** Ahmed arrives for his shift at main gate
 
 **Main Flow:**
-1. Ahmed arrives at warehouse entrance
-2. Opens web scanner URL on his smartphone (bookmark saved)
-3. Browser requests camera permission (granted on first use)
-4. Ahmed holds his printed QR badge in front of camera
-5. Scanner decodes QR code and sends employee ID to backend
-6. System verifies employee exists and is active
-7. System records check-in timestamp (e.g., "2025-11-15 08:02:00")
-8. System determines status:
-   - If time ≤ 08:00 → Status: "Checked In"
-   - If time > 08:00 → Status: "Late"
-9. Scanner displays confirmation: "Welcome, Ahmed! Checked in at 08:02"
-10. Manager's dashboard instantly updates to show Ahmed as on-site
 
-**At End of Shift:**
-11. Ahmed scans QR code again at exit
-12. System records check-out timestamp (e.g., "2025-11-15 17:05:00")
-13. Status changes to "Checked Out"
-14. Scanner displays: "Goodbye, Ahmed! Checked out at 17:05"
+**Check-In Process:**
+1. Ahmed arrives at main gate entrance at 08:02
+2. Ahmed presents his QR code badge to Hassan (security guard)
+3. Hassan scans Ahmed's QR badge using the tablet scanner
+4. Scanner decodes QR code and sends employee ID to backend
+5. System verifies employee exists and is active
+6. System displays verification screen on Hassan's tablet:
+   ```
+   ┌─────────────────────────────────┐
+   │  EMPLOYEE VERIFICATION          │
+   ├─────────────────────────────────┤
+   │  Photo: [Ahmed's Photo]         │
+   │  Name: Ahmed Ali                │
+   │  Employee ID: EMP-001           │
+   │  Department: Warehouse Ops      │
+   │  Position: Warehouse Worker     │
+   │  Status: Active                 │
+   │  Shift Start: 08:00             │
+   ├─────────────────────────────────┤
+   │  [✓ CONFIRM CHECK-IN]           │
+   │  [✗ DENY ENTRY]                 │
+   └─────────────────────────────────┘
+   ```
+7. Hassan visually compares Ahmed's face with the photo on screen
+8. Identity confirmed - Hassan taps "Confirm Check-In"
+9. System records check-in timestamp (08:02:00)
+10. System determines status:
+    - Time = 08:02 > Shift Start (08:00) → Status: "Late"
+11. Tablet displays confirmation: "Ahmed Ali - Checked in at 08:02 (Late)"
+12. Ahmed proceeds into facility
+13. Manager's dashboard instantly updates to show Ahmed as on-site
+
+**Check-Out Process:**
+14. At end of shift (17:05), Ahmed exits through main gate
+15. Hassan scans Ahmed's QR badge again
+16. Verification screen displays (same as step 6, but with "Confirm Check-Out" button)
+17. Hassan confirms identity and taps "Confirm Check-Out"
+18. System records check-out timestamp (17:05:00)
+19. Status changes to "Checked Out"
+20. Tablet displays: "Ahmed Ali - Checked out at 17:05. Total hours: 9.05"
+21. Dashboard updates to remove Ahmed from on-site list
 
 **Alternative Flows:**
-- **Scanner Malfunction:** Admin can manually record attendance via desktop app (override function)
-- **QR Code Lost:** Employee reports to admin, new QR code generated, old one deactivated
-- **Network Down:** Scanner queues scans locally, syncs when connection restored (future enhancement)
 
-**Postcondition:** Attendance record stored with employee ID, date, check-in time, check-out time, status
+**A1: Security Denies Entry (Suspicious Activity)**
+- At step 8, Hassan notices person doesn't match photo (wrong person, stolen badge)
+- Hassan taps "Deny Entry" button
+- System prompts: "Reason for denial?" → Hassan selects: "Identity mismatch"
+- System logs security incident with timestamp and reason
+- System sends instant notification to warehouse manager: "Security Alert: Check-in denied for badge EMP-001 at 08:02"
+- Tablet displays: "Entry denied. Manager notified."
+- Hassan prevents person from entering, follows security protocol
+- Manager investigates incident
+
+**A2: QR Code Lost/Stolen**
+- Employee reports lost badge to admin
+- Admin deactivates old QR code in system
+- If old QR is scanned, system displays: "Badge deactivated. Contact administrator."
+- Hassan denies entry, directs employee to admin office
+- Admin generates new QR code after verifying employee identity
+
+**A3: Scanner Malfunction**
+- Network or scanner failure at gate
+- Hassan radios warehouse manager
+- Manager manually records attendance via desktop app using override function
+- Hassan logs employee name in temporary backup list
+- When system restored, manager reconciles manual entries
+
+**A4: Employee Forgot Badge**
+- Employee arrives without badge
+- Hassan cannot scan QR code
+- Employee directed to admin office
+- Admin verifies identity (ID card) and manually records check-in with note
+- Temporary paper pass issued for the day
+
+**A5: Late Arrival with Valid Reason**
+- At step 11, system flags Ahmed as "Late" (08:02 > 08:00)
+- Ahmed explains reason to Hassan (traffic, medical appointment)
+- Hassan adds note when confirming: "Late - Medical appointment"
+- Manager reviews late arrivals report, sees note, no disciplinary action
+
+**Postcondition:**
+- Attendance record stored with employee ID, date, check-in time, check-out time, status, verified by security guard
+- If denied, security incident logged with reason and manager notified
+- Employee either granted or denied facility access based on verification
 
 ---
 
@@ -832,6 +941,13 @@ The key innovation is **tight integration between supply chain operations and wo
 - Input validation on all user inputs
 - Audit logging for critical operations (future enhancement)
 
+**Attendance Fraud Prevention:**
+- Security guard-controlled QR scanning (not employee self-scan)
+- Photo verification required before check-in approval
+- Physical presence at gate required (prevents remote scanning)
+- Guard discretion to deny suspicious check-ins
+- Security incidents logged and manager notified immediately
+
 ### 9.4 Database Schema
 
 **Core Tables:**
@@ -857,6 +973,7 @@ employees (
   position VARCHAR(50),
   phone VARCHAR(20),
   qr_code VARCHAR(100) UNIQUE,
+  photo_url VARCHAR(255), -- Cloud storage URL for employee photo
   hire_date DATE,
   is_active BOOLEAN DEFAULT TRUE
 )
@@ -1084,14 +1201,15 @@ attendance (
 
 ### 11.3 Sample Employees
 
-| Name | Department | Position | Role | QR Code | Hire Date |
-|------|------------|----------|------|---------|-----------|
-| Khaled Admin | Administration | System Administrator | ADMIN | QR-ADM-001 | 2023-01-15 |
-| Sarah Manager | Warehouse Operations | Warehouse Manager | MANAGER | QR-MGR-001 | 2023-03-10 |
-| Ahmed Ali | Warehouse Operations | Warehouse Worker | EMPLOYEE | QR-EMP-001 | 2024-02-01 |
-| Fatima Hassan | Quality Control | QC Inspector | EMPLOYEE | QR-EMP-002 | 2023-06-20 |
-| Mohammed Omar | Warehouse Operations | Warehouse Worker | EMPLOYEE | QR-EMP-003 | 2024-05-15 |
-| Layla Abdullah | Inventory Management | Inventory Specialist | MANAGER | QR-MGR-002 | 2023-08-01 |
+| Name | Department | Position | Role | QR Code | Photo URL | Hire Date |
+|------|------------|----------|------|---------|-----------|-----------|
+| Khaled Admin | Administration | System Administrator | ADMIN | QR-ADM-001 | https://storage.tidbcloud.com/fresh-dairy/employees/ADM-001.jpg | 2023-01-15 |
+| Sarah Manager | Warehouse Operations | Warehouse Manager | MANAGER | QR-MGR-001 | https://storage.tidbcloud.com/fresh-dairy/employees/MGR-001.jpg | 2023-03-10 |
+| Ahmed Ali | Warehouse Operations | Warehouse Worker | EMPLOYEE | QR-EMP-001 | https://storage.tidbcloud.com/fresh-dairy/employees/EMP-001.jpg | 2024-02-01 |
+| Fatima Hassan | Quality Control | QC Inspector | EMPLOYEE | QR-EMP-002 | https://storage.tidbcloud.com/fresh-dairy/employees/EMP-002.jpg | 2023-06-20 |
+| Mohammed Omar | Warehouse Operations | Warehouse Worker | EMPLOYEE | QR-EMP-003 | https://storage.tidbcloud.com/fresh-dairy/employees/EMP-003.jpg | 2024-05-15 |
+| Layla Abdullah | Inventory Management | Inventory Specialist | MANAGER | QR-MGR-002 | https://storage.tidbcloud.com/fresh-dairy/employees/MGR-002.jpg | 2023-08-01 |
+| Hassan Khalid | Security | Security Guard | EMPLOYEE | QR-EMP-004 | https://storage.tidbcloud.com/fresh-dairy/employees/EMP-004.jpg | 2022-11-01 |
 
 ---
 
@@ -1112,15 +1230,24 @@ This document is a **living document** that will evolve as the project progresse
 
 ### 12.3 Known Pending Decisions
 - [ ] Exact expiration date tracking requirements for perishable items
-- [ ] Mobile app vs. web scanner for attendance (currently web scanner)
+- [ ] Security guard user role (SECURITY vs EMPLOYEE role) - needs team discussion
+- [ ] Cloud storage provider for employee photos (TiDB Cloud storage vs AWS S3 vs Azure Blob)
 - [ ] Integration with external payroll systems (future consideration)
 - [ ] Barcode support in addition to QR codes (future enhancement)
 
-### 12.4 Document Update Log
+### 12.4 Recent Decisions Made
+- ✅ **QR Attendance Security (Nov 15, 2025):** Changed from employee self-scan to security guard-controlled scanning with photo verification to prevent time fraud
+- ✅ **Employee Photos (Nov 15, 2025):** Store as cloud URLs in `photo_url` field, not local files
+- ✅ **Single Gate (Nov 15, 2025):** System designed for single main gate entrance (no multi-gate tracking needed)
+- ✅ **Manager Notification (Nov 15, 2025):** Denied check-ins automatically notify warehouse manager
+- ✅ **No Manual Logbook (Nov 15, 2025):** Digital-only system, manual override only for scanner failures
+
+### 12.5 Document Update Log
 
 | Date | Version | Changes | Updated By |
 |------|---------|---------|------------|
 | 2025-11-15 | 1.0 | Initial comprehensive project idea document created | Team |
+| 2025-11-15 | 1.1 | Updated QR attendance workflow: security guard-controlled scanning with photo verification, added security guard persona, updated database schema with photo_url field, added fraud prevention measures | Team |
 
 ---
 
