@@ -1,4 +1,4 @@
-package com.team.supplychain.test;
+package com.team.supplychain.test.java.com.supplychain.test;
 
 import com.team.supplychain.utils.DatabaseConnection;
 import java.sql.*;
