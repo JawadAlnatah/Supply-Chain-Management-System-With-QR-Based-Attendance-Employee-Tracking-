@@ -225,40 +225,7 @@ This document specifies the design and implementation of **role-based dashboards
 
 ### 4.1 Admin Dashboard - "Command Center"
 
-**Layout Mockup:**
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│  Fresh Dairy Co. - Supply Chain System    [User: Khaled Admin] [⚙️] │
-├──────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐          │
-│  │  System Health │ │  Active Users  │ │  Total Items   │          │
-│  │      🟢 OK     │ │      24 👥     │ │     342 📦     │          │
-│  │   Uptime: 99%  │ │  Last 24h: 18  │ │  Value: $45K   │          │
-│  └────────────────┘ └────────────────┘ └────────────────┘          │
-│                                                                      │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐          │
-│  │  Low Stock     │ │  Security      │ │  Pending Tasks │          │
-│  │    8 items ⚠️  │ │  Incidents: 0  │ │     3 tasks    │          │
-│  │  [View Details]│ │  Status: Safe  │ │  [View Tasks]  │          │
-│  └────────────────┘ └────────────────┘ └────────────────┘          │
-│                                                                      │
-│  ┌──────────────────────────────────────┐  ┌─────────────────────┐ │
-│  │  Inventory Value Trend (Last 7 Days) │  │  Critical Alerts    │ │
-│  │  📈 [LineChart]                       │  │  🔴 Milk: 50 units  │ │
-│  │      $50K ┤                           │  │  🟡 Late: 3 emps    │ │
-│  │      $45K ┤    ╱─╲                    │  │  🟢 All OK: Cheese  │ │
-│  │      $40K ┤   ╱   ╲   ╱─╲             │  │                     │ │
-│  │      $35K ┤  ╱     ╲ ╱   ╲            │  │  [View All Alerts]  │ │
-│  │           └────────────────           │  │                     │ │
-│  │           Mon Tue Wed Thu Fri         │  │                     │ │
-│  └──────────────────────────────────────┘  └─────────────────────┘ │
-│                                                                      │
-│  Quick Actions:                                                     │
-│  [➕ Create User] [👥 Manage Employees] [⚙️ Settings] [📊 Reports]  │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
 ```
 
 **Widgets:**
@@ -326,49 +293,7 @@ This document specifies the design and implementation of **role-based dashboards
 
 ### 4.2 Manager Dashboard - "Operations Hub"
 
-**Layout Mockup:**
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│  Fresh Dairy Co. - Warehouse Operations  [User: Sarah Manager] [📊] │
-├──────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐          │
-│  │  Inventory     │ │  On-Site Now   │ │  POs In Transit│          │
-│  │  342 items 📦  │ │    12 👤       │ │     2 🚚       │          │
-│  │  8 need reorder│ │  Ahmed, Fatima │ │  [View Details]│          │
-│  └────────────────┘ └────────────────┘ └────────────────┘          │
-│                                                                      │
-│  ┌──────────────────────────────────────────────────────────────┐   │
-│  │  Stock Levels by Category                                    │   │
-│  │  ┌─────────────────────────────────────────────────────────┐ │   │
-│  │  │ Milk    ████████░░ 80% (200/250)                        │ │   │
-│  │  │ Cheese  ████░░░░░░ 40% (60/150) ⚠️ REORDER               │ │   │
-│  │  │ Yogurt  ██████████ 95% (190/200)                        │ │   │
-│  │  │ Butter  ███████░░░ 70% (84/120)                         │ │   │
-│  │  │ Cream   ██████░░░░ 65% (52/80)                          │ │   │
-│  │  └─────────────────────────────────────────────────────────┘ │   │
-│  └──────────────────────────────────────────────────────────────┘   │
-│                                                                      │
-│  ┌──────────────────────────────────────┐  ┌─────────────────────┐ │
-│  │  Recent Alerts & Actions             │  │  POs In Progress    │ │
-│  │  🔴 Cheddar 500g - REORDER (35 left) │  │                     │ │
-│  │     [Create PO] [Adjust Levels]      │  │  PO-1115-001:       │ │
-│  │                                       │  │  🟡 PREPARING       │ │
-│  │  🟡 Ahmed Ali - Late at 08:15         │  │  Milk from Green    │ │
-│  │     [View Attendance] [Add Note]     │  │  Pastures Farm      │ │
-│  │                                       │  │  ETA: 4 min         │ │
-│  │  🟢 Delivery from PlastiPack - Today  │  │                     │ │
-│  │     [Mark Received] [View Details]   │  │  PO-1115-002:       │ │
-│  │                                       │  │  🔵 SHIPPED         │ │
-│  └──────────────────────────────────────┘  │  Bottles from Eco   │ │
-│                                             │  ETA: 8 min         │ │
-│  Quick Actions:                             │  [View All POs]     │ │
-│  [📋 Create PO] [📊 Update Inventory]       └─────────────────────┘ │
-│  [👥 View Attendance] [📈 Generate Report]                          │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
-```
 
 **Widgets:**
 
@@ -442,46 +367,6 @@ This document specifies the design and implementation of **role-based dashboards
 
 ### 4.3 Employee Dashboard - "Personal Portal"
 
-**Layout Mockup:**
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│  Fresh Dairy Co.                         [User: Ahmed Ali] [👤]     │
-├──────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  ┌──────────────────────────────────────────────────────────────┐   │
-│  │                 Your Attendance Status                       │   │
-│  │                                                              │   │
-│  │                     ✅ CHECKED IN                            │   │
-│  │                                                              │   │
-│  │  Check-In:  08:05 AM          Status: On-Time               │   │
-│  │  Shift:     08:00 AM - 05:00 PM                             │   │
-│  │  Location:  Main Gate (verified by Hassan)                  │   │
-│  │                                                              │   │
-│  └──────────────────────────────────────────────────────────────┘   │
-│                                                                      │
-│  ┌──────────────────────────────────────────────────────────────┐   │
-│  │  Your Weekly Attendance (Last 7 Days)                       │   │
-│  │                                                              │   │
-│  │  Mon   Tue   Wed   Thu   Fri   Sat   Sun                   │   │
-│  │   ✅    ✅    ✅    ⚠️    ✅    ✅    ⚠️                      │   │
-│  │  8:00  8:05  8:00  8:15  8:00  8:00  8:20                   │   │
-│  │                                                              │   │
-│  │  Total Hours This Week: 42.5 hours                          │   │
-│  │  On-Time: 5 days  |  Late: 2 days                           │   │
-│  │                                                              │   │
-│  └──────────────────────────────────────────────────────────────┘   │
-│                                                                      │
-│  ┌──────────────────────────────────────────────────────────────┐   │
-│  │  Current On-Site Employees: 12                              │   │
-│  │  (Ahmed, Fatima, Mohammed, Sarah, Layla, Hassan...)         │   │
-│  └──────────────────────────────────────────────────────────────┘   │
-│                                                                      │
-│  Quick Access:                                                      │
-│  [📋 View Inventory] [📅 My Attendance History]                     │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
-```
 
 **Widgets:**
 
