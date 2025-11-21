@@ -42,6 +42,7 @@ public class AdminDashboardController {
     /**
      * Set the current logged-in admin user
      */
+
     public void setCurrentUser(User user) {
         this.currentUser = user;
         updateUserInterface();
@@ -50,6 +51,7 @@ public class AdminDashboardController {
     /**
      * Initialize the controller
      */
+    
     @FXML
     private void initialize() {
         // TODO: Load real-time data from database

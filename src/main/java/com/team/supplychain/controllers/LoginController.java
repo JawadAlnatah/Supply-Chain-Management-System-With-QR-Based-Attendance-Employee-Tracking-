@@ -177,8 +177,7 @@ public class LoginController {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle(dashboardTitle);
-            stage.setWidth(1200);
-            stage.setHeight(800);
+            
             // Make window fullscreen
             stage.setMaximized(true);
             stage.setFullScreen(false); // Use maximized instead of true fullscreen for better UX
