@@ -12,7 +12,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.team.supplychain.controllers.ManagerDashboardController"
             prefHeight="700.0" prefWidth="1400.0"
-            stylesheets="@../css/styles.css">
+            stylesheets="@../css/styles.css, @../css/dashboard-manager.css">
 
     <!-- TOP: Modern Header Section -->
     <top>

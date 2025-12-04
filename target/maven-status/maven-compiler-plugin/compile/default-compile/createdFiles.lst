@@ -1,9 +1,13 @@
 com\team\supplychain\models\User.class
+com\team\supplychain\controllers\EmployeeCreateRequisitionViewController$InventoryItemData.class
 com\team\supplychain\models\InventoryItem.class
+com\team\supplychain\controllers\EmployeeCreateRequisitionViewController$RequisitionItem.class
 com\team\supplychain\dao\InventoryDAO.class
 com\team\supplychain\services\AttendanceService.class
 com\team\supplychain\dao\SupplierDAO.class
 com\team\supplychain\enums\UserRole.class
+com\team\supplychain\controllers\EmployeeCreateRequisitionViewController$2.class
+com\team\supplychain\controllers\EmployeeAttendanceViewController.class
 com\team\supplychain\controllers\AttendanceController.class
 com\team\supplychain\controllers\EmployeeController.class
 com\team\supplychain\utils\DatabaseConnection.class
@@ -16,6 +20,8 @@ com\team\supplychain\services\InventoryService.class
 com\team\supplychain\utils\ValidationUtil.class
 com\team\supplychain\utils\PasswordUtil.class
 com\team\supplychain\controllers\ManagerDashboardController.class
+com\team\supplychain\controllers\EmployeeCreateRequisitionViewController$1.class
+com\team\supplychain\controllers\EmployeeRequisitionsViewController.class
 com\team\supplychain\controllers\EmployeeDashboardController.class
 com\team\supplychain\controllers\InventoryController.class
 com\team\supplychain\dao\AttendanceDAO.class
@@ -30,6 +36,9 @@ com\team\supplychain\services\AuthenticationService.class
 com\team\supplychain\utils\AlertUtil.class
 com\team\supplychain\controllers\LoginController.class
 com\team\supplychain\controllers\DashboardController.class
+com\team\supplychain\controllers\EmployeeCreateRequisitionViewController.class
+com\team\supplychain\controllers\EmployeeAttendanceViewController$AttendanceRecord.class
+com\team\supplychain\controllers\EmployeeRequisitionsViewController$RequisitionRecord.class
 com\team\supplychain\utils\DatabasePasswordUpdater.class
 com\team\supplychain\services\QRCodeService.class
 com\team\supplychain\dao\PurchaseOrderDAO.class

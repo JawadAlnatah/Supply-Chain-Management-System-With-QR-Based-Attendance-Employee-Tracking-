@@ -1,184 +1,438 @@
 /* ============================================
-   EMPLOYEE DASHBOARD - FRESH DAIRY CO.
-   Material Design Inspired Theme
-   Primary Color: Green (#43a047)
+   EMPLOYEE DASHBOARD THEME
+   Material Design Inspired Green Theme
+   Primary: Green (#43a047)
+   Accent: Dark Green (#2e7d32)
+   Background: Light Green Gradient
+
+   This file OVERRIDES styles.css base styles
+   with employee-specific colors and theming.
    ============================================ */
 
-/* ROOT CONTAINER */
-.dashboard-root {
-    -fx-background-color: linear-gradient(to bottom, #e8f5e9 0%, #ffffff 100%);
+/* ROOT - Light Background */
+.root {
+    -fx-background-color: #f8f9fa;
 }
 
-/* HEADER SECTION */
-.dashboard-header {
+/* TOP BAR - Light Green Theme */
+.top-bar-modern {
     -fx-background-color: white;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 10, 0, 0, 2);
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: #43a047;
 }
 
-.dashboard-title {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
+.app-title-modern {
     -fx-text-fill: #43a047;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
 }
 
-.user-label {
-    -fx-font-size: 14px;
+.app-subtitle {
+    -fx-text-fill: #757575;
+}
+
+/* Search (not used in employee dashboard) */
+.search-container {
+    -fx-background-color: #e8f5e9;
+    -fx-border-color: #c8e6c9;
+    -fx-border-width: 1;
+}
+
+.search-field {
     -fx-text-fill: #424242;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-prompt-text-fill: rgba(66, 66, 66, 0.6);
 }
 
-.icon-button {
+.search-icon {
+    -fx-text-fill: #43a047;
+}
+
+/* Notification Icon */
+.notification-icon {
     -fx-background-color: #e8f5e9;
     -fx-text-fill: #43a047;
-    -fx-font-size: 18px;
-    -fx-background-radius: 20;
-    -fx-min-width: 40px;
-    -fx-min-height: 40px;
-    -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
 }
 
-.icon-button:hover {
+.notification-icon:hover {
     -fx-background-color: #c8e6c9;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 2);
 }
 
-.icon-button:pressed {
+.notification-icon:pressed {
     -fx-background-color: #a5d6a7;
 }
 
-/* SCROLL PANE */
-.dashboard-scroll {
-    -fx-background-color: transparent;
-}
-
-.dashboard-scroll > .viewport {
-    -fx-background-color: transparent;
-}
-
-/* CONTENT AREA */
-.dashboard-content {
-    -fx-background-color: transparent;
-}
-
-/* WELCOME SECTION */
-.welcome-message {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2e7d32;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.datetime-label {
-    -fx-font-size: 16px;
-    -fx-text-fill: #757575;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-/* DASHBOARD CARDS - BASE STYLE */
-.dashboard-card {
-    -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 10, 0, 0, 2);
-    -fx-border-radius: 12;
-}
-
-.dashboard-card:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 15, 0, 0, 4);
-}
-
-/* ATTENDANCE CARD (Large, Prominent) */
-.attendance-card {
-    -fx-min-height: 220px;
-    -fx-background-color: linear-gradient(135deg, #ffffff 0%, #f1f8f4 100%);
-    -fx-border-color: #43a047;
-    -fx-border-width: 2;
-    -fx-border-radius: 12;
-}
-
-.card-title-large {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2e7d32;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.card-title {
-    -fx-font-size: 16px;
-    -fx-font-weight: 600;
+/* User Info */
+.welcome-text-modern {
     -fx-text-fill: #424242;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/* STATUS CIRCLE */
+.role-text-modern {
+    -fx-text-fill: #43a047;
+}
+
+/* User Avatar */
+.user-avatar {
+    -fx-background-color: #43a047;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.4), 8, 0, 0, 2);
+}
+
+.avatar-icon {
+    -fx-text-fill: white;
+}
+
+/* Logout Button */
+.logout-button-modern {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(220,38,38,0.3), 8, 0, 0, 2);
+}
+
+.logout-button-modern:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.logout-button-modern:pressed {
+    -fx-background-color: #991b1b;
+}
+
+/* SIDEBAR - Dark Green-Tinted Theme */
+.sidebar-modern {
+    -fx-background-color: linear-gradient(to bottom, #1a2e1f, #0f1910);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 5, 0);
+}
+
+/* Logo Section */
+.logo-section {
+    -fx-background-color: rgba(102,187,106,0.12);
+    -fx-border-color: rgba(102,187,106,0.25);
+    -fx-border-width: 0 0 1 0;
+}
+
+.logo-icon {
+    -fx-text-fill: #66bb6a;
+}
+
+.logo-text {
+    -fx-text-fill: #ffffff;
+}
+
+/* Menu */
+.menu-separator {
+    -fx-background-color: rgba(102,187,106,0.2);
+}
+
+.menu-header-modern {
+    -fx-text-fill: #ffffff;
+}
+
+.menu-button-modern {
+    -fx-text-fill: #ffffff;
+    -fx-border-color: transparent;
+}
+
+.menu-button-modern Label {
+    -fx-text-fill: #ffffff;
+}
+
+.menu-button-modern:hover {
+    -fx-background-color: rgba(102,187,106,0.25);
+    -fx-border-color: #66bb6a;
+    -fx-text-fill: white;
+}
+
+.menu-button-modern:hover Label {
+    -fx-text-fill: #ffffff;
+}
+
+.menu-button-modern:pressed {
+    -fx-background-color: rgba(102,187,106,0.4);
+}
+
+.menu-icon {
+    -fx-text-fill: #66bb6a;
+}
+
+/* User Info Card */
+.user-info-card {
+    -fx-background-color: rgba(102,187,106,0.12);
+    -fx-border-color: rgba(102,187,106,0.3);
+}
+
+.user-avatar-small {
+    -fx-background-color: linear-gradient(to bottom right, #66bb6a, #43a047);
+}
+
+.user-info-email {
+    -fx-text-fill: #ffffff;
+}
+
+.user-status {
+    -fx-text-fill: #66bb6a;
+}
+
+/* CONTENT AREA - Light/White */
+.content-area-modern {
+    -fx-background-color: #ffffff;
+}
+
+/* Welcome Message - Dark Text on Light Background */
+.welcome-message-modern {
+    -fx-text-fill: #2c3e50;
+}
+
+.subtitle-modern {
+    -fx-text-fill: #7f8c8d;
+}
+
+.section-title {
+    -fx-text-fill: #2c3e50;
+}
+
+/* STAT CARDS - Light Green Theme */
+.stat-card-modern {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 12, 0, 0, 3);
+}
+
+.stat-card-modern:hover {
+    -fx-border-color: #43a047;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.3), 18, 0, 0, 5);
+}
+
+/* Stat Icons - Green Material Design */
+.stat-icon-blue {
+    -fx-background-color: linear-gradient(to bottom right, #43a047, #388e3c);
+}
+
+.stat-icon-green {
+    -fx-background-color: linear-gradient(to bottom right, #66bb6a, #43a047);
+}
+
+.stat-icon-purple {
+    -fx-background-color: linear-gradient(to bottom right, #ab47bc, #8e24aa);
+}
+
+.stat-icon-orange {
+    -fx-background-color: linear-gradient(to bottom right, #ffa726, #ff9800);
+}
+
+.stat-icon-modern {
+    -fx-text-fill: white;
+}
+
+.stat-label-modern {
+    -fx-text-fill: #7f8c8d;
+}
+
+.stat-value-modern {
+    -fx-text-fill: #2c3e50;
+}
+
+.stat-change-positive {
+    -fx-text-fill: #43a047;
+}
+
+.stat-change-negative {
+    -fx-text-fill: #e53935;
+}
+
+/* ACTION BUTTONS - Green Theme */
+.action-button-primary {
+    -fx-background-color: linear-gradient(to bottom right, #43a047, #388e3c);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.4), 10, 0, 0, 4);
+}
+
+.action-button-primary:hover {
+    -fx-background-color: linear-gradient(to bottom right, #66bb6a, #43a047);
+}
+
+.action-button-secondary {
+    -fx-background-color: white;
+    -fx-text-fill: #43a047;
+    -fx-border-color: #43a047;
+}
+
+.action-button-secondary:hover {
+    -fx-background-color: #43a047;
+    -fx-text-fill: white;
+}
+
+/* STATUS BAR - Light Theme */
+.status-bar-modern {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1 0 0 0;
+}
+
+.status-indicator {
+    -fx-text-fill: #27ae60;
+}
+
+.status-text-modern {
+    -fx-text-fill: #6c757d;
+}
+
+.version-text {
+    -fx-text-fill: #adb5bd;
+}
+
+.copyright-text-modern {
+    -fx-text-fill: #6c757d;
+}
+
+/* SCROLLBAR - Green Theme */
+.scroll-bar .thumb {
+    -fx-background-color: #43a047;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #66bb6a;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #f5f5f5;
+}
+
+/* ACTIVITY ITEMS - Light Theme */
+.activity-list {
+    -fx-background-color: transparent;
+}
+
+.activity-item {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+}
+
+.activity-item:hover {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #c8e6c9;
+}
+
+.activity-item-warning {
+    -fx-border-color: #ffa726;
+}
+
+.activity-item-success {
+    -fx-border-color: #66bb6a;
+}
+
+.activity-item-info {
+    -fx-border-color: #42a5f5;
+}
+
+.activity-title {
+    -fx-text-fill: #424242;
+}
+
+.activity-description {
+    -fx-text-fill: #757575;
+}
+
+.activity-timestamp {
+    -fx-text-fill: #9e9e9e;
+}
+
+/* PURCHASE ORDER ITEMS - Green Theme */
+.po-item {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+}
+
+.po-item:hover {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #c8e6c9;
+}
+
+.po-number {
+    -fx-text-fill: #424242;
+}
+
+.po-separator {
+    -fx-text-fill: #bdbdbd;
+}
+
+.po-supplier {
+    -fx-text-fill: #616161;
+}
+
+.po-items {
+    -fx-text-fill: #757575;
+}
+
+/* PO Progress Bar - Green */
+.po-progress-bar {
+    -fx-accent: #43a047;
+}
+
+.po-progress-bar > .bar {
+    -fx-background-color: linear-gradient(to right, #43a047, #66bb6a);
+}
+
+.po-progress-bar > .track {
+    -fx-background-color: #e0e0e0;
+}
+
+/* PO Status Badges - Light Theme */
+.po-status-pending {
+    -fx-background-color: rgba(255,167,38,0.15);
+    -fx-text-fill: #ff6f00;
+}
+
+.po-status-preparing {
+    -fx-background-color: rgba(255,167,38,0.2);
+    -fx-text-fill: #f57c00;
+}
+
+.po-status-shipped {
+    -fx-background-color: rgba(67,160,71,0.15);
+    -fx-text-fill: #43a047;
+}
+
+.po-eta {
+    -fx-text-fill: #757575;
+}
+
+/* ============================================
+   EMPLOYEE-SPECIFIC COMPONENTS
+   (for attendance calendar, etc.)
+   ============================================ */
+
+/* Attendance Status Circle */
 .status-circle {
-    -fx-fill: transparent;
-    -fx-stroke-width: 5;
+    -fx-background-radius: 50%;
+    -fx-min-width: 80px;
+    -fx-min-height: 80px;
+    -fx-max-width: 80px;
+    -fx-max-height: 80px;
+    -fx-alignment: center;
 }
 
 .status-checked-in {
-    -fx-fill: #e8f5e9;
-    -fx-stroke: #43a047;
+    -fx-background-color: linear-gradient(to bottom right, #43a047, #388e3c);
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.5), 15, 0, 0, 5);
 }
 
-.status-icon {
-    -fx-font-size: 48px;
-    -fx-text-fill: #43a047;
-    -fx-font-weight: bold;
-}
-
-.status-label {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.status-label-active {
-    -fx-text-fill: #43a047;
-}
-
-/* DETAIL LABELS */
-.detail-icon {
-    -fx-font-size: 24px;
-}
-
-.detail-label {
-    -fx-font-size: 13px;
-    -fx-text-fill: #757575;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.detail-value {
-    -fx-font-size: 16px;
-    -fx-font-weight: 600;
-    -fx-text-fill: #212121;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-/* CALENDAR CARD */
-.calendar-card {
-    -fx-min-height: 200px;
-}
-
+/* Weekly Calendar */
 .week-calendar {
-    -fx-background-color: #fafafa;
-    -fx-background-radius: 8;
-    -fx-padding: 10;
+    -fx-background-color: transparent;
 }
 
 .day-box {
     -fx-background-color: white;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-min-width: 70px;
+    -fx-background-radius: 10;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-min-width: 60px;
+    -fx-min-height: 70px;
+    -fx-alignment: center;
 }
 
 .day-present {
     -fx-border-color: #43a047;
-    -fx-border-width: 2;
     -fx-background-color: #e8f5e9;
 }
 
@@ -190,212 +444,282 @@
 
 .day-future {
     -fx-border-color: #e0e0e0;
-    -fx-border-width: 1;
     -fx-background-color: white;
-}
-
-.day-box:hover {
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
 }
 
 .day-label {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #616161;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-    -fx-letter-spacing: 0.5px;
+    -fx-text-fill: #424242;
 }
 
-.day-number {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #212121;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.day-status {
-    -fx-font-size: 16px;
-    -fx-text-fill: #43a047;
-}
-
-.day-today .day-status {
-    -fx-text-fill: #2e7d32;
-}
-
-.day-future .day-status {
-    -fx-text-fill: #bdbdbd;
-}
-
-/* LEGEND */
-.legend {
-    -fx-padding: 10 0 0 0;
-}
-
-.legend-dot {
-    -fx-stroke: transparent;
-}
-
-.legend-present {
-    -fx-fill: #43a047;
-}
-
-.legend-today {
-    -fx-fill: #2e7d32;
-}
-
-.legend-future {
-    -fx-fill: #e0e0e0;
-}
-
-.legend-label {
-    -fx-font-size: 12px;
-    -fx-text-fill: #616161;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-/* TEAM CARD */
+/* Team Card */
 .team-card {
-    -fx-min-height: 200px;
+    -fx-background-color: #f1f8f4;
 }
 
-.team-icon {
-    -fx-font-size: 40px;
-}
-
-.team-count {
-    -fx-font-size: 42px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #43a047;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.team-subtitle {
-    -fx-font-size: 13px;
-    -fx-text-fill: #757575;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.department-info,
-.position-info {
-    -fx-background-color: #f5f5f5;
-    -fx-background-radius: 6;
-    -fx-padding: 10;
-}
-
-.dept-icon,
-.pos-icon {
-    -fx-font-size: 16px;
-}
-
-.dept-label,
-.pos-label {
-    -fx-font-size: 12px;
-    -fx-text-fill: #616161;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.dept-value,
-.pos-value {
-    -fx-font-size: 14px;
-    -fx-font-weight: 600;
-    -fx-text-fill: #212121;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-    -fx-padding: 5 0 0 0;
-}
-
-/* STAT CARDS */
-.stat-card {
-    -fx-min-height: 140px;
-    -fx-alignment: center;
-}
-
-.stat-icon {
-    -fx-font-size: 36px;
-}
-
-.stat-value {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #43a047;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-}
-
-.stat-label {
-    -fx-font-size: 13px;
-    -fx-text-fill: #757575;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-    -fx-text-alignment: center;
-}
-
-/* FOOTER */
-.dashboard-footer {
-    -fx-background-color: white;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, -2);
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 1 0 0 0;
-}
-
+/* Quick Action Button (Employee specific) */
 .quick-action-button {
-    -fx-background-color: linear-gradient(to bottom, #43a047, #388e3c);
+    -fx-background-color: #43a047;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-font-weight: 600;
     -fx-background-radius: 8;
-    -fx-padding: 12 24 12 24;
+    -fx-padding: 12 20 12 20;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(67, 160, 71, 0.3), 8, 0, 0, 2);
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.3), 8, 0, 0, 2);
 }
 
 .quick-action-button:hover {
-    -fx-background-color: linear-gradient(to bottom, #388e3c, #2e7d32);
-    -fx-effect: dropshadow(gaussian, rgba(67, 160, 71, 0.5), 12, 0, 0, 4);
+    -fx-background-color: #66bb6a;
 }
 
 .quick-action-button:pressed {
+    -fx-background-color: #388e3c;
+}
+
+/* ============================================
+   ADDITIONAL STYLES FOR EMPLOYEE PAGES
+   (My Attendance, My Requisitions)
+   ============================================ */
+
+/* Active menu button highlighting */
+.menu-button-active {
+    -fx-background-color: rgba(102,187,106,0.4);
+    -fx-border-color: #66bb6a;
+    -fx-border-width: 0 0 0 4;
+}
+
+/* Absent day styling */
+.day-absent {
+    -fx-border-color: #e53935;
+    -fx-background-color: rgba(229,57,53,0.1);
+}
+
+/* Late day styling */
+.day-late {
+    -fx-border-color: #ffa726;
+    -fx-background-color: rgba(255,167,38,0.1);
+}
+
+/* Rejected status badge */
+.po-status-rejected {
+    -fx-background-color: rgba(229,57,53,0.15);
+    -fx-text-fill: #e53935;
+}
+
+/* Red stat icon for rejected items */
+.stat-icon-red {
+    -fx-background-color: linear-gradient(to bottom right, #ef5350, #e53935);
+}
+
+/* Calendar day headers (for monthly view) */
+.calendar-day-header {
+    -fx-text-fill: #757575;
+    -fx-font-size: 11px;
+    -fx-alignment: center;
+    -fx-padding: 8;
+}
+
+/* Empty calendar cells */
+.day-empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* ============================================
+   MODERN COMBOBOX - LARGE & ENHANCED
+   ============================================ */
+
+/* Main ComboBox Styling - LARGE */
+.modern-combobox {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-padding: 14px 18px;
+    -fx-font-size: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 6, 0, 0, 2);
+    -fx-cursor: hand;
+}
+
+/* Hover State */
+.modern-combobox:hover {
+    -fx-border-color: #43a047;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.25), 10, 0, 0, 3);
+}
+
+/* Focused State - Green Glow */
+.modern-combobox:focused {
+    -fx-border-color: #43a047;
+    -fx-border-width: 2.5px;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.4), 15, 0, 0, 4);
+    -fx-background-color: #f9fdf9;
+}
+
+/* Disabled State */
+.modern-combobox:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+/* Arrow Button - Large & Modern */
+.modern-combobox .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 12px 12px 0;
+    -fx-padding: 14px 16px;
+}
+
+.modern-combobox:hover .arrow-button {
+    -fx-background-color: rgba(67,160,71,0.08);
+}
+
+.modern-combobox:focused .arrow-button {
+    -fx-background-color: rgba(67,160,71,0.12);
+}
+
+/* Arrow Icon - Larger & Green */
+.modern-combobox .arrow {
+    -fx-background-color: #43a047;
+    -fx-padding: 5px 5px 2.5px 5px;
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+}
+
+.modern-combobox:hover .arrow {
     -fx-background-color: #2e7d32;
 }
 
-/* ANIMATIONS */
-@keyframes fadeIn {
-    from {
-        -fx-opacity: 0;
-        -fx-translate-y: 10px;
-    }
-    to {
-        -fx-opacity: 1;
-        -fx-translate-y: 0;
-    }
+/* Text inside ComboBox - Larger */
+.modern-combobox .text {
+    -fx-fill: #2c3e50;
+    -fx-font-size: 15px;
 }
 
-.dashboard-card {
-    -fx-animation: fadeIn 0.4s ease-out;
+/* Placeholder/Prompt Text - Larger */
+.modern-combobox .prompt-text {
+    -fx-fill: #9e9e9e;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
 }
 
-/* Removed pulse animation to prevent scaling effects */
+/* ============================================
+   COMBOBOX DROPDOWN/POPUP STYLING
+   ============================================ */
 
-/* SCROLLBAR STYLING */
-.scroll-bar {
+/* Dropdown Popup Container */
+.modern-combobox .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-color: #43a047;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.3), 20, 0, 0, 8);
+    -fx-padding: 6px;
+}
+
+/* Dropdown List Cell - Large */
+.modern-combobox .list-cell {
     -fx-background-color: transparent;
+    -fx-background-radius: 8px;
+    -fx-padding: 14px 16px;
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 14px;
 }
 
-.scroll-bar .thumb {
-    -fx-background-color: #bdbdbd;
-    -fx-background-radius: 5;
+/* Dropdown Cell Hover */
+.modern-combobox .list-cell:hover {
+    -fx-background-color: rgba(67,160,71,0.15);
+    -fx-cursor: hand;
 }
 
-.scroll-bar .thumb:hover {
-    -fx-background-color: #9e9e9e;
+/* Dropdown Cell Selected */
+.modern-combobox .list-cell:selected {
+    -fx-background-color: #43a047;
+    -fx-text-fill: white;
 }
 
-.scroll-bar .track {
+/* Dropdown Cell Focused (keyboard navigation) */
+.modern-combobox .list-cell:focused {
+    -fx-background-color: rgba(67,160,71,0.25);
+    -fx-border-color: #43a047;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 8px;
+}
+
+/* Scrollbar in Dropdown - Green Theme */
+.modern-combobox .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 4px 0 0;
+}
+
+.modern-combobox .scroll-bar:vertical .thumb {
+    -fx-background-color: #43a047;
+    -fx-background-radius: 10px;
+    -fx-min-width: 8px;
+}
+
+.modern-combobox .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #66bb6a;
+}
+
+.modern-combobox .scroll-bar:vertical .track {
     -fx-background-color: #f5f5f5;
-    -fx-background-radius: 5;
+    -fx-background-radius: 10px;
 }
 
-.scroll-bar .increment-button,
-.scroll-bar .decrement-button {
+.modern-combobox .scroll-bar:vertical .increment-button,
+.modern-combobox .scroll-bar:vertical .decrement-button {
     -fx-background-color: transparent;
     -fx-padding: 0;
+}
+
+.modern-combobox .scroll-bar:vertical .increment-arrow,
+.modern-combobox .scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: #43a047;
+    -fx-padding: 3px;
+}
+
+/* Empty message when no items */
+.modern-combobox .placeholder .label {
+    -fx-text-fill: #9e9e9e;
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+
+/* ============================================
+   MODERN TEXTAREA - LARGE & ENHANCED
+   ============================================ */
+
+.modern-textarea {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-padding: 14px 18px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 6, 0, 0, 2);
+}
+
+.modern-textarea:hover {
+    -fx-border-color: #43a047;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.25), 10, 0, 0, 3);
+}
+
+.modern-textarea:focused {
+    -fx-border-color: #43a047;
+    -fx-border-width: 2.5px;
+    -fx-effect: dropshadow(gaussian, rgba(67,160,71,0.4), 15, 0, 0, 4);
+    -fx-background-color: #f9fdf9;
+}
+
+.modern-textarea .content {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.modern-textarea .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.modern-textarea .scroll-pane .viewport {
+    -fx-background-color: transparent;
 }

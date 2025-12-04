@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.team.supplychain.controllers.EmployeeCreateRequisitionViewController"
+      spacing="30"
+      style="-fx-background-color: #f8f9fa;">
+
+    <padding>
+        <Insets top="35" right="35" bottom="35" left="35"/>
+    </padding>
+
+    <!-- Page Header -->
+    <VBox spacing="8">
+        <Label text="Create New Requisition" styleClass="page-title">
+            <font>
+                <Font name="System Bold" size="28"/>
+            </font>
+            <style>
+                -fx-text-fill: #2c3e50;
+            </style>
+        </Label>
+        <Label text="Request items from supplier for your department" styleClass="page-subtitle">
+            <font>
+                <Font size="14"/>
+            </font>
+            <style>
+                -fx-text-fill: #757575;
+            </style>
+        </Label>
+    </VBox>
+
+    <!-- Main Form Section - 2 Column Layout -->
+    <GridPane hgap="20" vgap="20">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="60" minWidth="400"/>
+            <ColumnConstraints percentWidth="40" minWidth="300"/>
+        </columnConstraints>
+
+        <!-- LEFT COLUMN - Request Details Card -->
+        <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="0">
+
+            <!-- Request Details Card -->
+            <VBox spacing="20" styleClass="content-card-modern">
+                <padding>
+                    <Insets top="25" right="25" bottom="25" left="25"/>
+                </padding>
+                <style>
+                    -fx-background-color: white;
+                    -fx-background-radius: 15;
+                    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 12, 0, 0, 3);
+                </style>
+
+                <Label text="Request Details">
+                    <font>
+                        <Font name="System Bold" size="16"/>
+                    </font>
+                    <style>
+                        -fx-text-fill: #2c3e50;
+                    </style>
+                </Label>
+
+                <!-- Supplier -->
+                <VBox spacing="8">
+                    <Label text="Supplier *">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #424242;
+                        </style>
+                    </Label>
+                    <ComboBox fx:id="supplierCombo"
+                             promptText="Select supplier"
+                             styleClass="modern-combobox"
+                             maxWidth="Infinity">
+                        <style>
+                            -fx-background-radius: 12;
+                            -fx-border-radius: 12;
+                        </style>
+                    </ComboBox>
+                </VBox>
+
+                <!-- Category -->
+                <VBox spacing="8">
+                    <Label text="Category *">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #424242;
+                        </style>
+                    </Label>
+                    <ComboBox fx:id="categoryCombo"
+                             promptText="Select category"
+                             styleClass="modern-combobox"
+                             maxWidth="Infinity">
+                        <style>
+                            -fx-background-radius: 12;
+                            -fx-border-radius: 12;
+                        </style>
+                    </ComboBox>
+                </VBox>
+
+                <!-- Priority -->
+                <VBox spacing="8">
+                    <Label text="Priority *">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #424242;
+                        </style>
+                    </Label>
+                    <ComboBox fx:id="priorityCombo"
+                             promptText="Select priority level"
+                             styleClass="modern-combobox"
+                             maxWidth="Infinity">
+                        <style>
+                            -fx-background-radius: 12;
+                            -fx-border-radius: 12;
+                        </style>
+                    </ComboBox>
+                </VBox>
+
+                <!-- Department -->
+                <VBox spacing="8">
+                    <Label text="Department *">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #424242;
+                        </style>
+                    </Label>
+                    <ComboBox fx:id="departmentCombo"
+                             promptText="Select department"
+                             styleClass="modern-combobox"
+                             maxWidth="Infinity">
+                        <style>
+                            -fx-background-radius: 12;
+                            -fx-border-radius: 12;
+                        </style>
+                    </ComboBox>
+                </VBox>
+
+                <!-- Justification -->
+                <VBox spacing="8">
+                    <Label text="Justification / Notes *">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #424242;
+                        </style>
+                    </Label>
+                    <TextArea fx:id="justificationArea"
+                             promptText="Explain why these items are needed..."
+                             styleClass="modern-textarea"
+                             wrapText="true"
+                             prefRowCount="5">
+                        <style>
+                            -fx-background-radius: 12;
+                            -fx-border-radius: 12;
+                        </style>
+                    </TextArea>
+                    <Label text="* Required fields">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #757575;
+                        </style>
+                    </Label>
+                </VBox>
+            </VBox>
+
+        </VBox>
+
+        <!-- RIGHT COLUMN - Summary Card -->
+        <VBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="0">
+
+            <!-- Summary Card -->
+            <VBox spacing="15" styleClass="stat-card-modern">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <style>
+                    -fx-background-color: white;
+                    -fx-background-radius: 15;
+                    -fx-border-color: #e0e0e0;
+                    -fx-border-width: 1;
+                    -fx-border-radius: 15;
+                    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 12, 0, 0, 3);
+                </style>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Summary">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #2c3e50;
+                        </style>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="DRAFT">
+                        <padding>
+                            <Insets top="6" right="12" bottom="6" left="12"/>
+                        </padding>
+                        <font>
+                            <Font name="System Bold" size="10"/>
+                        </font>
+                        <style>
+                            -fx-background-color: rgba(67,160,71,0.15);
+                            -fx-text-fill: #43a047;
+                            -fx-background-radius: 15;
+                        </style>
+                    </Label>
+                </HBox>
+
+                <Separator>
+                    <style>
+                        -fx-background-color: #e0e0e0;
+                    </style>
+                </Separator>
+
+                <!-- Requisition ID -->
+                <VBox spacing="5">
+                    <Label text="Requisition ID">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #757575;
+                        </style>
+                    </Label>
+                    <Label fx:id="requisitionIdLabel" text="REQ-001">
+                        <font>
+                            <Font name="System Bold" size="20"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #43a047;
+                        </style>
+                    </Label>
+                </VBox>
+
+                <Separator>
+                    <style>
+                        -fx-background-color: #e0e0e0;
+                    </style>
+                </Separator>
+
+                <!-- Supplier -->
+                <VBox spacing="5">
+                    <Label text="Supplier">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #757575;
+                        </style>
+                    </Label>
+                    <Label fx:id="supplierNameLabel" text="Not selected">
+                        <font>
+                            <Font name="System Bold" size="13"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #2c3e50;
+                        </style>
+                    </Label>
+                </VBox>
+
+                <Separator>
+                    <style>
+                        -fx-background-color: #e0e0e0;
+                    </style>
+                </Separator>
+
+                <!-- Total Items -->
+                <VBox spacing="5">
+                    <Label text="Total Items">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #757575;
+                        </style>
+                    </Label>
+                    <Label fx:id="totalItemsLabel" text="0">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #2c3e50;
+                        </style>
+                    </Label>
+                </VBox>
+
+                <Separator>
+                    <style>
+                        -fx-background-color: #e0e0e0;
+                    </style>
+                </Separator>
+
+                <!-- Total Amount -->
+                <VBox spacing="5">
+                    <Label text="Total Amount">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #757575;
+                        </style>
+                    </Label>
+                    <Label fx:id="totalAmountLabel" text="0.00">
+                        <font>
+                            <Font name="System Bold" size="18"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #43a047;
+                        </style>
+                    </Label>
+                </VBox>
+
+                <Separator>
+                    <style>
+                        -fx-background-color: #e0e0e0;
+                    </style>
+                </Separator>
+
+                <!-- Requested By -->
+                <VBox spacing="5">
+                    <Label text="Requested By">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #757575;
+                        </style>
+                    </Label>
+                    <Label fx:id="requestedByLabel" text="Employee Name">
+                        <font>
+                            <Font size="13"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #2c3e50;
+                        </style>
+                    </Label>
+                </VBox>
+
+                <Separator>
+                    <style>
+                        -fx-background-color: #e0e0e0;
+                    </style>
+                </Separator>
+
+                <!-- Request Date -->
+                <VBox spacing="5">
+                    <Label text="Request Date">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #757575;
+                        </style>
+                    </Label>
+                    <Label fx:id="requestDateLabel" text="2024-01-15">
+                        <font>
+                            <Font size="13"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #2c3e50;
+                        </style>
+                    </Label>
+                </VBox>
+
+            </VBox>
+
+        </VBox>
+
+    </GridPane>
+
+    <!-- Items Section -->
+    <VBox spacing="15" styleClass="content-card-modern">
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
+        <style>
+            -fx-background-color: white;
+            -fx-background-radius: 15;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 12, 0, 0, 3);
+        </style>
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Requisition Items">
+                <font>
+                    <Font name="System Bold" size="16"/>
+                </font>
+                <style>
+                    -fx-text-fill: #2c3e50;
+                </style>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="addItemButton"
+                   text="+ Add Item"
+                   styleClass="action-button-secondary"
+                   onAction="#handleAddItem">
+                <font>
+                    <Font size="12"/>
+                </font>
+                <style>
+                    -fx-background-radius: 10;
+                    -fx-border-radius: 10;
+                </style>
+            </Button>
+        </HBox>
+
+        <Label text="Select items from inventory and specify quantities">
+            <font>
+                <Font size="11"/>
+            </font>
+            <style>
+                -fx-text-fill: #757575;
+            </style>
+        </Label>
+
+        <!-- Items Table -->
+        <TableView fx:id="itemsTable"
+                  styleClass="modern-table"
+                  prefHeight="300"
+                  VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="itemNameColumn"
+                           text="Item Name"
+                           prefWidth="250"
+                           minWidth="200"/>
+
+                <TableColumn fx:id="categoryColumn"
+                           text="Category"
+                           prefWidth="150"
+                           minWidth="120"/>
+
+                <TableColumn fx:id="quantityColumn"
+                           text="Quantity"
+                           prefWidth="100"
+                           minWidth="80"/>
+
+                <TableColumn fx:id="unitPriceColumn"
+                           text="Unit Price"
+                           prefWidth="120"
+                           minWidth="100"/>
+
+                <TableColumn fx:id="subtotalColumn"
+                           text="Subtotal"
+                           prefWidth="120"
+                           minWidth="100"/>
+
+                <TableColumn fx:id="actionsColumn"
+                           text="Actions"
+                           prefWidth="100"
+                           minWidth="80"/>
+            </columns>
+
+            <placeholder>
+                <VBox alignment="CENTER" spacing="10">
+                    <padding>
+                        <Insets top="30" right="20" bottom="30" left="20"/>
+                    </padding>
+                    <Label text="No items added yet">
+                        <font>
+                            <Font name="System Bold" size="14"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #757575;
+                        </style>
+                    </Label>
+                    <Label text="Click 'Add Item' to start building your requisition">
+                        <font>
+                            <Font size="12"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #9e9e9e;
+                        </style>
+                    </Label>
+                </VBox>
+            </placeholder>
+        </TableView>
+
+    </VBox>
+
+    <!-- Action Buttons -->
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button fx:id="cancelButton"
+               text="Cancel"
+               styleClass="action-button-secondary"
+               onAction="#handleCancel"
+               prefWidth="120">
+            <font>
+                <Font size="13"/>
+            </font>
+            <padding>
+                <Insets top="10" right="30" bottom="10" left="30"/>
+            </padding>
+            <style>
+                -fx-background-radius: 10;
+                -fx-border-radius: 10;
+            </style>
+        </Button>
+
+        <Button fx:id="submitButton"
+               text="Submit Request"
+               styleClass="action-button-primary"
+               onAction="#handleSubmit"
+               prefWidth="150">
+            <font>
+                <Font size="13"/>
+            </font>
+            <padding>
+                <Insets top="10" right="30" bottom="10" left="30"/>
+            </padding>
+            <style>
+                -fx-background-radius: 10;
+                -fx-border-radius: 10;
+            </style>
+        </Button>
+    </HBox>
+
+</VBox>
