@@ -590,6 +590,12 @@ public class EmployeeDashboardController {
         loadContentView("/fxml/EmployeeProfileView.fxml", profileButton);
     }
 
+    @FXML
+    private void handleInventory() {
+        System.out.println("Inventory clicked");
+        loadContentView("/fxml/ManagerInventory.fxml", null);
+    }
+
     // ==================== ACTION HANDLERS ====================
 
     @FXML
@@ -693,6 +699,8 @@ public class EmployeeDashboardController {
                 ((EmployeeCreateRequisitionViewController) controller).setCurrentUser(currentUser);
             } else if (controller instanceof EmployeeProfileViewController) {
                 ((EmployeeProfileViewController) controller).setCurrentUser(currentUser);
+            } else if (controller instanceof ManagerInventoryController) {
+                ((ManagerInventoryController) controller).setCurrentUser(currentUser);
             }
 
             // Replace the center content

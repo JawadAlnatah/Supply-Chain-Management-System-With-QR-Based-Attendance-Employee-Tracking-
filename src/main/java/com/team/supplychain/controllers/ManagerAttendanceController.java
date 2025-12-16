@@ -1,25 +1,31 @@
 package com.team.supplychain.controllers;
 
+import com.team.supplychain.dao.AttendanceDAO;
+import com.team.supplychain.enums.AttendanceStatus;
+import com.team.supplychain.models.Attendance;
 import com.team.supplychain.models.User;
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.List;
 
+/**
+ * Controller for the Manager Attendance Tracking view
+ * Displays all attendance records from database with statistics for selected date
+ */
 public class ManagerAttendanceController {
 
     @FXML private Label totalEmployeesLabel;
     @FXML private Label presentLabel;
     @FXML private Label absentLabel;
     @FXML private Label lateLabel;
-    @FXML private Label attendanceRateLabel;
 
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<String> departmentFilter;
@@ -28,18 +34,18 @@ public class ManagerAttendanceController {
     @FXML private Button exportButton;
     @FXML private Button refreshButton;
 
-    @FXML private TableView<AttendanceRecord> attendanceTable;
-    @FXML private TableColumn<AttendanceRecord, String> employeeIdColumn;
-    @FXML private TableColumn<AttendanceRecord, String> employeeNameColumn;
-    @FXML private TableColumn<AttendanceRecord, String> departmentColumn;
-    @FXML private TableColumn<AttendanceRecord, String> checkInColumn;
-    @FXML private TableColumn<AttendanceRecord, String> checkOutColumn;
-    @FXML private TableColumn<AttendanceRecord, String> hoursWorkedColumn;
-    @FXML private TableColumn<AttendanceRecord, String> statusColumn;
-    @FXML private TableColumn<AttendanceRecord, Void> actionsColumn;
+    @FXML private TableView<Attendance> attendanceTable;
+    @FXML private TableColumn<Attendance, Integer> employeeIdColumn;
+    @FXML private TableColumn<Attendance, String> employeeNameColumn;
+    @FXML private TableColumn<Attendance, String> departmentColumn;
+    @FXML private TableColumn<Attendance, String> checkInColumn;
+    @FXML private TableColumn<Attendance, String> checkOutColumn;
+    @FXML private TableColumn<Attendance, String> hoursWorkedColumn;
+    @FXML private TableColumn<Attendance, String> statusColumn;
 
     private User currentUser;
-    private ObservableList<AttendanceRecord> attendanceData;
+    private ObservableList<Attendance> attendanceData;
+    private final AttendanceDAO attendanceDAO = new AttendanceDAO();
 
     public void setCurrentUser(User user) {
         this.currentUser = user;
@@ -51,24 +57,60 @@ public class ManagerAttendanceController {
         attendanceData = FXCollections.observableArrayList();
         setupTable();
         setupFilters();
-        loadDummyData();
-        updateStats();
-        if (datePicker != null) datePicker.setValue(LocalDate.now());
+
+        // Initialize DatePicker to today
+        if (datePicker != null) {
+            datePicker.setValue(LocalDate.now());
+            // Wire DatePicker to reload stats when date changes
+            datePicker.setOnAction(e -> {
+                LocalDate selectedDate = datePicker.getValue();
+                if (selectedDate != null) {
+                    loadStatsForDate(selectedDate);
+                }
+            });
+        }
+
+        // Load all attendance records and stats for today
+        loadAllAttendanceFromDatabase();
+        loadStatsForDate(LocalDate.now());
     }
 
+    /**
+     * Set up table columns to use Attendance model fields
+     */
     private void setupTable() {
         if (attendanceTable == null) return;
 
-        employeeIdColumn.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
-        employeeNameColumn.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
-        departmentColumn.setCellValueFactory(new PropertyValueFactory<>("department"));
-        checkInColumn.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getCheckIn() != null ? cellData.getValue().getCheckIn().toString() : "-"));
-        checkOutColumn.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getCheckOut() != null ? cellData.getValue().getCheckOut().toString() : "-"));
-        hoursWorkedColumn.setCellValueFactory(new PropertyValueFactory<>("hoursWorked"));
+        // Employee ID column
+        employeeIdColumn.setCellValueFactory(cellData ->
+            new SimpleIntegerProperty(cellData.getValue().getEmployeeId()).asObject());
 
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        // Employee Name column - use getEmployeeFullName() helper method
+        employeeNameColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getEmployeeFullName()));
+
+        // Department column
+        departmentColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getDepartment()));
+
+        // Check In column - use formatted time
+        checkInColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getFormattedCheckInTime()));
+
+        // Check Out column - use formatted time
+        checkOutColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getFormattedCheckOutTime()));
+
+        // Hours Worked column - use formatted hours
+        hoursWorkedColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getFormattedHours()));
+
+        // Status column with color-coded labels
+        statusColumn.setCellValueFactory(cellData -> {
+            AttendanceStatus status = cellData.getValue().getStatus();
+            return new SimpleStringProperty(status != null ? status.name() : "N/A");
+        });
+
         statusColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -77,18 +119,21 @@ public class ManagerAttendanceController {
                     setGraphic(null);
                 } else {
                     Label label = new Label(status);
-                    label.setStyle("-fx-background-radius: 12px; -fx-padding: 6px 14px; -fx-font-size: 11px; -fx-font-weight: bold; " + getStyle(status));
+                    label.setStyle("-fx-background-radius: 12px; -fx-padding: 6px 14px; " +
+                                 "-fx-font-size: 11px; -fx-font-weight: bold; " +
+                                 getStatusStyle(status));
                     setGraphic(label);
                     setAlignment(Pos.CENTER);
                 }
             }
-            private String getStyle(String status) {
+
+            private String getStatusStyle(String status) {
                 switch (status) {
-                    case "Present":
+                    case "PRESENT":
                         return "-fx-background-color: rgba(16,185,129,0.15); -fx-text-fill: #10b981;";
-                    case "Late":
+                    case "LATE":
                         return "-fx-background-color: rgba(251,191,36,0.15); -fx-text-fill: #fbbf24;";
-                    case "Absent":
+                    case "ABSENT":
                         return "-fx-background-color: rgba(239,68,68,0.15); -fx-text-fill: #ef4444;";
                     default:
                         return "-fx-background-color: #e0e0e0; -fx-text-fill: #6b7280;";
@@ -96,87 +141,186 @@ public class ManagerAttendanceController {
             }
         });
 
-        actionsColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button viewButton = new Button("View");
-            {
-                viewButton.setStyle("-fx-background-color: #a78bfa; -fx-text-fill: white; -fx-background-radius: 6px; -fx-padding: 5px 12px; -fx-font-size: 11px; -fx-cursor: hand;");
-                viewButton.setOnAction(e -> System.out.println("View: " + getTableView().getItems().get(getIndex()).getEmployeeName()));
-            }
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : viewButton);
-                if (!empty) setAlignment(Pos.CENTER);
-            }
-        });
-
         attendanceTable.setItems(attendanceData);
     }
 
+    /**
+     * Set up filter dropdowns
+     */
     private void setupFilters() {
         if (departmentFilter != null) {
-            departmentFilter.getItems().addAll("All Departments", "Production", "Quality Control", "Packaging", "Warehouse", "Administration");
+            departmentFilter.getItems().addAll("All Departments", "Production", "Quality Control",
+                "Packaging", "Warehouse", "Procurement", "Administration", "Finance");
             departmentFilter.setValue("All Departments");
         }
     }
 
-    private void loadDummyData() {
-        attendanceData.clear();
-        attendanceData.add(new AttendanceRecord("EMP001", "John Smith", "Production", LocalTime.of(8, 0), LocalTime.of(17, 0), "9.0", "Present"));
-        attendanceData.add(new AttendanceRecord("EMP002", "Sarah Johnson", "Quality Control", LocalTime.of(8, 15), LocalTime.of(17, 15), "9.0", "Late"));
-        attendanceData.add(new AttendanceRecord("EMP003", "Mike Wilson", "Packaging", null, null, "0.0", "Absent"));
-        attendanceData.add(new AttendanceRecord("EMP004", "Emily Brown", "Warehouse", LocalTime.of(8, 0), LocalTime.of(17, 0), "9.0", "Present"));
-        attendanceData.add(new AttendanceRecord("EMP005", "James Davis", "Production", LocalTime.of(8, 5), LocalTime.of(17, 5), "9.0", "Present"));
-        attendanceData.add(new AttendanceRecord("EMP006", "Lisa Anderson", "Administration", LocalTime.of(8, 30), LocalTime.of(17, 30), "9.0", "Late"));
-        attendanceData.add(new AttendanceRecord("EMP007", "Tom Martinez", "Production", LocalTime.of(8, 0), null, "0.0", "Present"));
-        attendanceData.add(new AttendanceRecord("EMP008", "Anna Taylor", "Quality Control", LocalTime.of(8, 0), LocalTime.of(17, 0), "9.0", "Present"));
+    /**
+     * Load all attendance records from database using background thread
+     * Shows ALL attendance records across all dates
+     */
+    private void loadAllAttendanceFromDatabase() {
+        Task<List<Attendance>> loadTask = new Task<>() {
+            @Override
+            protected List<Attendance> call() {
+                // Query database on background thread
+                return attendanceDAO.getAllAttendanceWithEmployeeDetails();
+            }
+        };
+
+        loadTask.setOnSucceeded(event -> {
+            // Update UI on JavaFX thread
+            List<Attendance> records = loadTask.getValue();
+            if (records != null) {
+                attendanceData.clear();
+                attendanceData.addAll(records);
+                System.out.println("Loaded " + records.size() + " attendance records from database");
+            } else {
+                System.err.println("Failed to load attendance records - null result");
+                showError("Database Error", "Failed to load attendance records from database");
+            }
+        });
+
+        loadTask.setOnFailed(event -> {
+            // Handle errors
+            Throwable error = loadTask.getException();
+            error.printStackTrace();
+            showError("Database Error", "Failed to load attendance: " + error.getMessage());
+        });
+
+        // Start background task
+        new Thread(loadTask).start();
     }
 
-    private void updateStats() {
-        int total = attendanceData.size();
-        long present = attendanceData.stream().filter(r -> r.getStatus().equals("Present") || r.getStatus().equals("Late")).count();
-        long absent = attendanceData.stream().filter(r -> r.getStatus().equals("Absent")).count();
-        long late = attendanceData.stream().filter(r -> r.getStatus().equals("Late")).count();
-        double rate = total > 0 ? (present * 100.0 / total) : 0;
+    /**
+     * Load statistics for a specific date
+     * Stats show ONLY the selected date's data
+     *
+     * @param date The date to calculate stats for
+     */
+    private void loadStatsForDate(LocalDate date) {
+        Task<List<Attendance>> statsTask = new Task<>() {
+            @Override
+            protected List<Attendance> call() {
+                // Query attendance records for the selected date only
+                return attendanceDAO.getAttendanceForDate(date);
+            }
+        };
 
+        statsTask.setOnSucceeded(event -> {
+            // Calculate stats on JavaFX thread
+            List<Attendance> dateRecords = statsTask.getValue();
+            if (dateRecords != null) {
+                updateStats(dateRecords);
+                System.out.println("Loaded stats for " + date + ": " + dateRecords.size() + " records");
+            } else {
+                System.err.println("Failed to load stats for date: " + date);
+                clearStats();
+            }
+        });
+
+        statsTask.setOnFailed(event -> {
+            // Handle errors
+            Throwable error = statsTask.getException();
+            error.printStackTrace();
+            showError("Database Error", "Failed to load statistics: " + error.getMessage());
+            clearStats();
+        });
+
+        // Start background task
+        new Thread(statsTask).start();
+    }
+
+    /**
+     * Update statistics labels based on attendance records
+     *
+     * @param records List of attendance records for the selected date
+     */
+    private void updateStats(List<Attendance> records) {
+        int total = records.size();
+
+        // Count PRESENT status (excludes LATE and ABSENT)
+        long present = records.stream()
+            .filter(a -> a.getStatus() == AttendanceStatus.PRESENT)
+            .count();
+
+        // Count LATE status
+        long late = records.stream()
+            .filter(a -> a.getStatus() == AttendanceStatus.LATE)
+            .count();
+
+        // Count ABSENT status
+        long absent = records.stream()
+            .filter(a -> a.getStatus() == AttendanceStatus.ABSENT)
+            .count();
+
+        // Update labels
         if (totalEmployeesLabel != null) totalEmployeesLabel.setText(String.valueOf(total));
         if (presentLabel != null) presentLabel.setText(String.valueOf(present));
         if (absentLabel != null) absentLabel.setText(String.valueOf(absent));
         if (lateLabel != null) lateLabel.setText(String.valueOf(late));
-        if (attendanceRateLabel != null) attendanceRateLabel.setText(String.format("%.0f%%", rate));
     }
 
-    @FXML private void handleToday() { if (datePicker != null) datePicker.setValue(LocalDate.now()); }
-    @FXML private void handleExport() { showInfo("Export", "Attendance report export functionality will be implemented."); }
-    @FXML private void handleRefresh() { loadDummyData(); updateStats(); }
+    /**
+     * Clear all statistics labels
+     */
+    private void clearStats() {
+        if (totalEmployeesLabel != null) totalEmployeesLabel.setText("0");
+        if (presentLabel != null) presentLabel.setText("0");
+        if (absentLabel != null) absentLabel.setText("0");
+        if (lateLabel != null) lateLabel.setText("0");
+    }
+
+    // ==================== EVENT HANDLERS ====================
+
+    /**
+     * Set DatePicker to today's date
+     */
+    @FXML
+    private void handleToday() {
+        if (datePicker != null) {
+            datePicker.setValue(LocalDate.now());
+            loadStatsForDate(LocalDate.now());
+        }
+    }
+
+    /**
+     * Export attendance report (placeholder)
+     */
+    @FXML
+    private void handleExport() {
+        showInfo("Export", "Attendance report export functionality will be implemented.");
+    }
+
+    /**
+     * Refresh both table data and statistics
+     */
+    @FXML
+    private void handleRefresh() {
+        System.out.println("Refreshing attendance data...");
+        loadAllAttendanceFromDatabase();
+
+        LocalDate selectedDate = datePicker != null ? datePicker.getValue() : LocalDate.now();
+        if (selectedDate != null) {
+            loadStatsForDate(selectedDate);
+        }
+    }
+
+    // ==================== UTILITY METHODS ====================
 
     private void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
+        alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-    public static class AttendanceRecord {
-        private final StringProperty employeeId, employeeName, department, hoursWorked, status;
-        private final ObjectProperty<LocalTime> checkIn, checkOut;
-
-        public AttendanceRecord(String id, String name, String dept, LocalTime in, LocalTime out, String hours, String status) {
-            this.employeeId = new SimpleStringProperty(id);
-            this.employeeName = new SimpleStringProperty(name);
-            this.department = new SimpleStringProperty(dept);
-            this.checkIn = new SimpleObjectProperty<>(in);
-            this.checkOut = new SimpleObjectProperty<>(out);
-            this.hoursWorked = new SimpleStringProperty(hours);
-            this.status = new SimpleStringProperty(status);
-        }
-
-        public String getEmployeeId() { return employeeId.get(); }
-        public String getEmployeeName() { return employeeName.get(); }
-        public String getDepartment() { return department.get(); }
-        public LocalTime getCheckIn() { return checkIn.get(); }
-        public LocalTime getCheckOut() { return checkOut.get(); }
-        public String getHoursWorked() { return hoursWorked.get(); }
-        public String getStatus() { return status.get(); }
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

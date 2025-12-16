@@ -166,10 +166,10 @@
                 </font>
             </Button>
 
-            <Button text="  Security &amp; Access" styleClass="menu-button-modern" onAction="#handleSecurity"
+            <Button text="  Audit Logs" styleClass="menu-button-modern" onAction="#handleAuditLogs"
                     maxWidth="Infinity" graphicTextGap="15">
                 <graphic>
-                    <Label text="🔒" styleClass="menu-icon">
+                    <Label text="📋" styleClass="menu-icon">
                         <font>
                             <Font size="18.0" />
                         </font>
@@ -180,10 +180,10 @@
                 </font>
             </Button>
 
-            <Button text="  Audit Logs" styleClass="menu-button-modern" onAction="#handleAuditLogs"
+            <Button text="  Inventory" styleClass="menu-button-modern" onAction="#handleInventory"
                     maxWidth="Infinity" graphicTextGap="15">
                 <graphic>
-                    <Label text="📋" styleClass="menu-icon">
+                    <Label text="📦" styleClass="menu-icon">
                         <font>
                             <Font size="18.0" />
                         </font>

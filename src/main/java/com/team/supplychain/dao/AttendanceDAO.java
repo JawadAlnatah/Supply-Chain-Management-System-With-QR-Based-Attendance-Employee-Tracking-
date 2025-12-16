@@ -338,6 +338,81 @@ public class AttendanceDAO {
     }
 
     /**
+     * Get all attendance records across all employees with employee details
+     * Joins with employees and users tables to get employee names and departments
+     *
+     * @return List of all attendance records with employee information
+     */
+    public List<Attendance> getAllAttendanceWithEmployeeDetails() {
+        List<Attendance> attendanceList = new ArrayList<>();
+        String sql = "SELECT a.*, e.department, e.position, u.first_name, u.last_name " +
+                    "FROM attendance_records a " +
+                    "JOIN employees e ON a.employee_id = e.employee_id " +
+                    "JOIN users u ON e.user_id = u.user_id " +
+                    "ORDER BY a.date DESC, a.check_in_time DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Attendance attendance = extractAttendanceFromResultSet(rs);
+                // Set employee details from joined query
+                attendance.setEmployeeFirstName(rs.getString("first_name"));
+                attendance.setEmployeeLastName(rs.getString("last_name"));
+                attendance.setDepartment(rs.getString("department"));
+                attendance.setPosition(rs.getString("position"));
+                attendanceList.add(attendance);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return attendanceList;
+    }
+
+    /**
+     * Get all attendance records for a specific date with employee details
+     * Used by managers to view attendance for a particular day
+     *
+     * @param date The date to query attendance records for
+     * @return List of attendance records for the specified date
+     */
+    public List<Attendance> getAttendanceForDate(LocalDate date) {
+        List<Attendance> attendanceList = new ArrayList<>();
+        String sql = "SELECT a.*, e.department, e.position, u.first_name, u.last_name " +
+                    "FROM attendance_records a " +
+                    "JOIN employees e ON a.employee_id = e.employee_id " +
+                    "JOIN users u ON e.user_id = u.user_id " +
+                    "WHERE a.date = ? " +
+                    "ORDER BY a.check_in_time ASC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDate(1, Date.valueOf(date));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Attendance attendance = extractAttendanceFromResultSet(rs);
+                // Set employee details from joined query
+                attendance.setEmployeeFirstName(rs.getString("first_name"));
+                attendance.setEmployeeLastName(rs.getString("last_name"));
+                attendance.setDepartment(rs.getString("department"));
+                attendance.setPosition(rs.getString("position"));
+                attendanceList.add(attendance);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return attendanceList;
+    }
+
+    /**
      * Inner class for attendance statistics
      * Used by getStatistics() method
      */

@@ -469,16 +469,23 @@ public class AdminDashboardController {
         loadContentView("/fxml/AdminSystemSettings.fxml");
     }
 
-    @FXML
-    private void handleSecurity() {
-        System.out.println("Security & Access clicked");
-        loadContentView("/fxml/AdminSecurity.fxml");
-    }
+    // Removed from menu - uncomment if needed in future
+    // @FXML
+    // private void handleSecurity() {
+    //     System.out.println("Security & Access clicked");
+    //     loadContentView("/fxml/AdminSecurity.fxml");
+    // }
 
     @FXML
     private void handleAuditLogs() {
         System.out.println("Audit Logs clicked");
         loadContentView("/fxml/AdminAuditLogs.fxml");
+    }
+
+    @FXML
+    private void handleInventory() {
+        System.out.println("Inventory clicked");
+        loadContentView("/fxml/ManagerInventory.fxml");
     }
 
     @FXML
@@ -572,6 +579,8 @@ public class AdminDashboardController {
                 ((AdminAuditLogsController) controller).setCurrentUser(currentUser);
             } else if (controller instanceof AdminReportsController) {
                 ((AdminReportsController) controller).setCurrentUser(currentUser);
+            } else if (controller instanceof ManagerInventoryController) {
+                ((ManagerInventoryController) controller).setCurrentUser(currentUser);
             }
 
             // Replace content in center scroll pane

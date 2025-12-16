@@ -124,6 +124,20 @@
             </Label>
 
             <!-- Menu Buttons -->
+            <Button fx:id="dashboardButton" text="  Dashboard" styleClass="menu-button-modern" onAction="#handleDashboard"
+                    maxWidth="Infinity" graphicTextGap="15">
+                <graphic>
+                    <Label text="🏠" styleClass="menu-icon">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Label>
+                </graphic>
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+
             <Button text="  Inventory Management" styleClass="menu-button-modern" onAction="#handleInventory"
                     maxWidth="Infinity" graphicTextGap="15">
                 <graphic>

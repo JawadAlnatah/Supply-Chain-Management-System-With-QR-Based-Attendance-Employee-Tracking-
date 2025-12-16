@@ -1,16 +1,26 @@
 package com.team.supplychain.controllers;
 
+import com.team.supplychain.dao.InventoryDAO;
+import com.team.supplychain.models.InventoryItem;
 import com.team.supplychain.models.User;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for the Manager Inventory View
@@ -33,6 +43,11 @@ public class ManagerInventoryController {
     @FXML private Button exportButton;
     @FXML private Button refreshButton;
 
+    // ==================== CHART ====================
+    @FXML private BarChart<String, Number> inventoryChart;
+    @FXML private CategoryAxis categoryAxis;
+    @FXML private NumberAxis quantityAxis;
+
     // ==================== TABLE ====================
     @FXML private TableView<InventoryItem> inventoryTable;
     @FXML private TableColumn<InventoryItem, Integer> itemIdColumn;
@@ -47,6 +62,7 @@ public class ManagerInventoryController {
 
     private User currentUser;
     private ObservableList<InventoryItem> inventoryData;
+    private final InventoryDAO inventoryDAO = new InventoryDAO();
 
     /**
      * Set the current logged-in user
@@ -68,14 +84,11 @@ public class ManagerInventoryController {
         // Setup table
         setupInventoryTable();
 
-        // Load dummy data
-        loadDummyInventoryData();
-
         // Setup filters
         setupFilters();
 
-        // Update stats
-        updateStats();
+        // Load data from database
+        loadInventoryFromDatabase();
     }
 
     /**
@@ -85,33 +98,49 @@ public class ManagerInventoryController {
         if (inventoryTable == null) return;
 
         // Item ID Column
-        itemIdColumn.setCellValueFactory(new PropertyValueFactory<>("itemId"));
+        itemIdColumn.setCellValueFactory(cellData ->
+            new SimpleIntegerProperty(cellData.getValue().getItemId()).asObject());
 
         // Item Name Column
-        itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        itemNameColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getItemName()));
 
         // Category Column
-        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        categoryColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getCategory()));
 
         // Quantity Column
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityColumn.setCellValueFactory(cellData ->
+            new SimpleIntegerProperty(cellData.getValue().getQuantity()).asObject());
 
         // Reorder Level Column
-        reorderLevelColumn.setCellValueFactory(new PropertyValueFactory<>("reorderLevel"));
+        reorderLevelColumn.setCellValueFactory(cellData ->
+            new SimpleIntegerProperty(cellData.getValue().getReorderLevel()).asObject());
 
         // Unit Price Column
         unitPriceColumn.setCellValueFactory(cellData ->
-            new SimpleStringProperty("$" + cellData.getValue().getUnitPrice().toString()));
+            new SimpleStringProperty("SAR " + String.format("%.2f", cellData.getValue().getUnitPrice())));
 
         // Total Value Column
         totalValueColumn.setCellValueFactory(cellData -> {
-            BigDecimal total = cellData.getValue().getUnitPrice()
-                .multiply(BigDecimal.valueOf(cellData.getValue().getQuantity()));
-            return new SimpleStringProperty("$" + total.toString());
+            BigDecimal total = cellData.getValue().getTotalValue();
+            return new SimpleStringProperty("SAR " + String.format("%.2f", total));
         });
 
-        // Status Column with colored badges
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        // Status Column with colored badges (calculated from needsReorder)
+        statusColumn.setCellValueFactory(cellData -> {
+            InventoryItem item = cellData.getValue();
+            String status;
+            if (item.getQuantity() == 0) {
+                status = "Out of Stock";
+            } else if (item.needsReorder()) {
+                status = "Low Stock";
+            } else {
+                status = "In Stock";
+            }
+            return new SimpleStringProperty(status);
+        });
+
         statusColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -148,45 +177,12 @@ public class ManagerInventoryController {
             }
         });
 
-        // Actions Column with buttons
+        // Actions Column - Disabled for view-only mode
         actionsColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button editButton = new Button("Edit");
-            private final Button deleteButton = new Button("Delete");
-            private final HBox container = new HBox(8);
-
-            {
-                editButton.setStyle(
-                    "-fx-background-color: #a78bfa; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-background-radius: 6px; " +
-                    "-fx-padding: 5px 12px; " +
-                    "-fx-font-size: 11px; " +
-                    "-fx-cursor: hand;"
-                );
-                deleteButton.setStyle(
-                    "-fx-background-color: #ef4444; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-background-radius: 6px; " +
-                    "-fx-padding: 5px 12px; " +
-                    "-fx-font-size: 11px; " +
-                    "-fx-cursor: hand;"
-                );
-
-                editButton.setOnAction(event -> handleEditItem(getTableView().getItems().get(getIndex())));
-                deleteButton.setOnAction(event -> handleDeleteItem(getTableView().getItems().get(getIndex())));
-
-                container.getChildren().addAll(editButton, deleteButton);
-                container.setAlignment(Pos.CENTER);
-            }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(container);
-                }
+                setGraphic(null); // Disabled - view only mode
             }
         });
 
@@ -198,85 +194,220 @@ public class ManagerInventoryController {
      */
     private void setupFilters() {
         if (categoryFilter != null) {
-            categoryFilter.getItems().addAll("All Categories", "Raw Materials", "Packaging", "Office Supplies", "Equipment");
+            categoryFilter.getItems().addAll("All Categories", "Electronics", "Furniture",
+                "Office Supplies", "Raw Materials", "Packaging");
             categoryFilter.setValue("All Categories");
+
+            // Wire category filter to reload data
+            categoryFilter.setOnAction(e -> {
+                String selected = categoryFilter.getValue();
+                if ("All Categories".equals(selected)) {
+                    loadInventoryFromDatabase();
+                } else {
+                    loadInventoryByCategory(selected);
+                }
+            });
+        }
+
+        // Wire search field to filter data
+        if (searchField != null) {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue == null || newValue.trim().isEmpty()) {
+                    loadInventoryFromDatabase();
+                } else {
+                    searchInventory(newValue.trim());
+                }
+            });
         }
     }
 
     /**
-     * Load dummy inventory data for dairy company
+     * Load all inventory items from database using background thread
      */
-    private void loadDummyInventoryData() {
-        inventoryData.add(new InventoryItem(1, "Whole Milk - Bulk (1000L)", "Raw Materials", 45, 50, new BigDecimal("2500.00"), "Low Stock"));
-        inventoryData.add(new InventoryItem(2, "Fresh Cream (200L)", "Raw Materials", 120, 30, new BigDecimal("800.00"), "In Stock"));
-        inventoryData.add(new InventoryItem(3, "Skimmed Milk Powder (50kg)", "Raw Materials", 80, 40, new BigDecimal("450.00"), "In Stock"));
-        inventoryData.add(new InventoryItem(4, "Butter (25kg blocks)", "Raw Materials", 0, 20, new BigDecimal("320.00"), "Out of Stock"));
-        inventoryData.add(new InventoryItem(5, "Milk Bottles 1L (1000 units)", "Packaging", 250, 100, new BigDecimal("850.00"), "In Stock"));
-        inventoryData.add(new InventoryItem(6, "Plastic Bottle Caps (5000 units)", "Packaging", 15, 50, new BigDecimal("120.00"), "Low Stock"));
-        inventoryData.add(new InventoryItem(7, "Product Labels - Roll (2000)", "Packaging", 180, 80, new BigDecimal("220.00"), "In Stock"));
-        inventoryData.add(new InventoryItem(8, "Office Chair - Ergonomic", "Office Supplies", 24, 10, new BigDecimal("250.00"), "In Stock"));
-        inventoryData.add(new InventoryItem(9, "Whiteboard Markers (Set of 12)", "Office Supplies", 5, 15, new BigDecimal("8.50"), "Low Stock"));
-        inventoryData.add(new InventoryItem(10, "Hand Sanitizer (500ml)", "Office Supplies", 0, 25, new BigDecimal("8.00"), "Out of Stock"));
+    private void loadInventoryFromDatabase() {
+        Task<List<InventoryItem>> loadTask = new Task<>() {
+            @Override
+            protected List<InventoryItem> call() {
+                return inventoryDAO.getAllInventoryItems();
+            }
+        };
+
+        loadTask.setOnSucceeded(event -> {
+            List<InventoryItem> items = loadTask.getValue();
+            if (items != null) {
+                inventoryData.clear();
+                inventoryData.addAll(items);
+                updateStats();
+                System.out.println("Loaded " + items.size() + " inventory items from database");
+            } else {
+                System.err.println("Failed to load inventory - null result");
+                showError("Database Error", "Failed to load inventory items from database");
+            }
+        });
+
+        loadTask.setOnFailed(event -> {
+            Throwable error = loadTask.getException();
+            error.printStackTrace();
+            showError("Database Error", "Failed to load inventory: " + error.getMessage());
+        });
+
+        new Thread(loadTask).start();
     }
 
     /**
-     * Update statistics labels
+     * Load inventory items by category using background thread
+     */
+    private void loadInventoryByCategory(String category) {
+        Task<List<InventoryItem>> loadTask = new Task<>() {
+            @Override
+            protected List<InventoryItem> call() {
+                return inventoryDAO.getInventoryItemsByCategory(category);
+            }
+        };
+
+        loadTask.setOnSucceeded(event -> {
+            List<InventoryItem> items = loadTask.getValue();
+            if (items != null) {
+                inventoryData.clear();
+                inventoryData.addAll(items);
+                updateStats();
+                System.out.println("Loaded " + items.size() + " items in category: " + category);
+            }
+        });
+
+        loadTask.setOnFailed(event -> {
+            Throwable error = loadTask.getException();
+            error.printStackTrace();
+            showError("Database Error", "Failed to filter by category: " + error.getMessage());
+        });
+
+        new Thread(loadTask).start();
+    }
+
+    /**
+     * Search inventory items using background thread
+     */
+    private void searchInventory(String searchTerm) {
+        Task<List<InventoryItem>> searchTask = new Task<>() {
+            @Override
+            protected List<InventoryItem> call() {
+                return inventoryDAO.searchInventoryItems(searchTerm);
+            }
+        };
+
+        searchTask.setOnSucceeded(event -> {
+            List<InventoryItem> items = searchTask.getValue();
+            if (items != null) {
+                inventoryData.clear();
+                inventoryData.addAll(items);
+                updateStats();
+                System.out.println("Found " + items.size() + " items matching: " + searchTerm);
+            }
+        });
+
+        searchTask.setOnFailed(event -> {
+            Throwable error = searchTask.getException();
+            error.printStackTrace();
+            showError("Database Error", "Failed to search inventory: " + error.getMessage());
+        });
+
+        new Thread(searchTask).start();
+    }
+
+    /**
+     * Update statistics labels based on current inventory data
      */
     private void updateStats() {
         int totalItems = inventoryData.size();
-        long lowStock = inventoryData.stream().filter(item -> item.getStatus().equals("Low Stock")).count();
-        long outOfStock = inventoryData.stream().filter(item -> item.getStatus().equals("Out of Stock")).count();
 
+        // Count items needing reorder (low stock)
+        long lowStock = inventoryData.stream()
+            .filter(InventoryItem::needsReorder)
+            .filter(item -> item.getQuantity() > 0) // Not out of stock
+            .count();
+
+        // Count out of stock items
+        long outOfStock = inventoryData.stream()
+            .filter(item -> item.getQuantity() == 0)
+            .count();
+
+        // Calculate total inventory value
         BigDecimal totalValue = inventoryData.stream()
-            .map(item -> item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+            .map(InventoryItem::getTotalValue)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // Update UI labels
         if (totalItemsLabel != null) totalItemsLabel.setText(String.valueOf(totalItems));
         if (lowStockLabel != null) lowStockLabel.setText(String.valueOf(lowStock));
         if (outOfStockLabel != null) outOfStockLabel.setText(String.valueOf(outOfStock));
-        if (totalValueLabel != null) totalValueLabel.setText("$" + String.format("%,.2f", totalValue));
+        if (totalValueLabel != null) totalValueLabel.setText("SAR " + String.format("%,.2f", totalValue));
+
+        // Update chart
+        updateChart();
+    }
+
+    /**
+     * Update the inventory distribution chart by category
+     */
+    private void updateChart() {
+        if (inventoryChart == null) return;
+
+        // Group items by category and sum quantities
+        Map<String, Integer> categoryQuantities = new HashMap<>();
+        for (InventoryItem item : inventoryData) {
+            String category = item.getCategory();
+            int quantity = item.getQuantity();
+            categoryQuantities.put(category, categoryQuantities.getOrDefault(category, 0) + quantity);
+        }
+
+        // Create chart data series
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Quantity");
+
+        // Add data points for each category
+        for (Map.Entry<String, Integer> entry : categoryQuantities.entrySet()) {
+            XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+            series.getData().add(data);
+        }
+
+        // Clear existing data and add new series
+        inventoryChart.getData().clear();
+        inventoryChart.getData().add(series);
+
+        // Style the bars with purple gradient
+        inventoryChart.setStyle("-fx-bar-fill: linear-gradient(to bottom, #a78bfa, #8b5cf6);");
     }
 
     // ==================== EVENT HANDLERS ====================
 
+    /**
+     * Handle add item button (disabled for view-only mode)
+     */
     @FXML
     private void handleAddItem() {
         System.out.println("Add Item clicked");
-        showInfo("Add Item", "Add new item functionality will be implemented here.");
+        showInfo("View Only Mode", "Inventory is in view-only mode. Adding items is not available.");
     }
 
+    /**
+     * Handle export button
+     */
     @FXML
     private void handleExport() {
         System.out.println("Export clicked");
-        showInfo("Export Report", "Export functionality will be implemented here.");
+        showInfo("Export Report", "Export functionality will be implemented in a future update.");
     }
 
+    /**
+     * Handle refresh button - reload all data from database
+     */
     @FXML
     private void handleRefresh() {
-        System.out.println("Refresh clicked");
-        loadDummyInventoryData();
-        updateStats();
-        showInfo("Refreshed", "Inventory data has been refreshed.");
+        System.out.println("Refreshing inventory data...");
+        loadInventoryFromDatabase();
     }
 
-    private void handleEditItem(InventoryItem item) {
-        System.out.println("Edit item: " + item.getItemName());
-        showInfo("Edit Item", "Editing: " + item.getItemName());
-    }
-
-    private void handleDeleteItem(InventoryItem item) {
-        System.out.println("Delete item: " + item.getItemName());
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Delete");
-        alert.setHeaderText("Delete " + item.getItemName() + "?");
-        alert.setContentText("This action cannot be undone.");
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                inventoryData.remove(item);
-                updateStats();
-            }
-        });
-    }
+    // ==================== UTILITY METHODS ====================
 
     private void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -286,50 +417,11 @@ public class ManagerInventoryController {
         alert.showAndWait();
     }
 
-    // ==================== INNER CLASS ====================
-
-    /**
-     * Inventory Item Model
-     */
-    public static class InventoryItem {
-        private final IntegerProperty itemId;
-        private final StringProperty itemName;
-        private final StringProperty category;
-        private final IntegerProperty quantity;
-        private final IntegerProperty reorderLevel;
-        private final ObjectProperty<BigDecimal> unitPrice;
-        private final StringProperty status;
-
-        public InventoryItem(int itemId, String itemName, String category, int quantity,
-                           int reorderLevel, BigDecimal unitPrice, String status) {
-            this.itemId = new SimpleIntegerProperty(itemId);
-            this.itemName = new SimpleStringProperty(itemName);
-            this.category = new SimpleStringProperty(category);
-            this.quantity = new SimpleIntegerProperty(quantity);
-            this.reorderLevel = new SimpleIntegerProperty(reorderLevel);
-            this.unitPrice = new SimpleObjectProperty<>(unitPrice);
-            this.status = new SimpleStringProperty(status);
-        }
-
-        public int getItemId() { return itemId.get(); }
-        public IntegerProperty itemIdProperty() { return itemId; }
-
-        public String getItemName() { return itemName.get(); }
-        public StringProperty itemNameProperty() { return itemName; }
-
-        public String getCategory() { return category.get(); }
-        public StringProperty categoryProperty() { return category; }
-
-        public int getQuantity() { return quantity.get(); }
-        public IntegerProperty quantityProperty() { return quantity; }
-
-        public int getReorderLevel() { return reorderLevel.get(); }
-        public IntegerProperty reorderLevelProperty() { return reorderLevel; }
-
-        public BigDecimal getUnitPrice() { return unitPrice.get(); }
-        public ObjectProperty<BigDecimal> unitPriceProperty() { return unitPrice; }
-
-        public String getStatus() { return status.get(); }
-        public StringProperty statusProperty() { return status; }
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
