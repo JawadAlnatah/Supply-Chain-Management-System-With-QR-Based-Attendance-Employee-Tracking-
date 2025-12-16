@@ -48,13 +48,20 @@ public class WebServerLauncher {
 
         // HTTPS Configuration
         HttpConfiguration httpsConfig = new HttpConfiguration(httpConfig);
-        httpsConfig.addCustomizer(new SecureRequestCustomizer());
+        SecureRequestCustomizer secureCustomizer = new SecureRequestCustomizer();
+        secureCustomizer.setSniRequired(false);  // Allow access via IP address
+        secureCustomizer.setSniHostCheck(false);  // Disable SNI hostname verification
+        httpsConfig.addCustomizer(secureCustomizer);
 
         // SSL Context Factory
         SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
         sslContextFactory.setKeyStorePath("keystore.p12");
         sslContextFactory.setKeyStorePassword("changeit");
         sslContextFactory.setKeyManagerPassword("changeit");
+
+        // Development-friendly SSL settings
+        sslContextFactory.setSniRequired(false);  // Disable SNI checking for dev
+        sslContextFactory.setEndpointIdentificationAlgorithm(null);  // Allow IP access
 
         // HTTP Connector (port 8080) - keep for backward compatibility
         ServerConnector httpConnector = new ServerConnector(server,

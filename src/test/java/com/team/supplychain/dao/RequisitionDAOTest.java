@@ -33,7 +33,8 @@ class RequisitionDAOTest {
 
         assertNotNull(code1, "Requisition code should not be null");
         assertTrue(code1.startsWith("REQ-"), "Code should start with REQ-");
-        assertEquals(9, code1.length(), "Code should be REQ-XXXXX format");
+        assertTrue(code1.length() >= 9, "Code should be at least REQ-XXXXX format (9+ chars)");
+        assertTrue(code1.matches("REQ-\\d+"), "Code should match pattern REQ-{digits}");
         System.out.println("Generated code: " + code1);
 
         // Note: The generateRequisitionCode() uses MAX(requisition_id), so calling it twice

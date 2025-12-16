@@ -25,9 +25,11 @@ public class ManagerDashboardController {
     @FXML private Label currentUserLabel;
     @FXML private Button notificationsButton;
     @FXML private Button logoutButton;
+    @FXML private Button dashboardButton;
 
     // Main content area
     @FXML private ScrollPane centerScrollPane;
+    private javafx.scene.Node initialDashboardContent;
 
     // Metric cards
     @FXML private Label inventorySummaryLabel;
@@ -57,6 +59,11 @@ public class ManagerDashboardController {
      */
     @FXML
     private void initialize() {
+        // Save the initial dashboard content so we can restore it later
+        if (centerScrollPane != null) {
+            initialDashboardContent = centerScrollPane.getContent();
+        }
+
         // TODO: Load real-time operations data from database
         // TODO: Populate stock levels chart
         // TODO: Load recent activity/alerts
@@ -127,6 +134,15 @@ public class ManagerDashboardController {
     private void handleCreatePO() {
         System.out.println("Create new PO clicked");
         // TODO: Open create purchase order dialog/form
+    }
+
+    @FXML
+    private void handleDashboard() {
+        System.out.println("Dashboard clicked");
+        // Restore the initial dashboard content
+        if (centerScrollPane != null && initialDashboardContent != null) {
+            centerScrollPane.setContent(initialDashboardContent);
+        }
     }
 
     @FXML

@@ -1,7 +1,10 @@
 package com.team.supplychain.controllers;
 
+import com.team.supplychain.dao.InventoryDAO;
 import com.team.supplychain.dao.RequisitionDAO;
+import com.team.supplychain.models.InventoryItem;
 import com.team.supplychain.models.Requisition;
+import com.team.supplychain.models.RequisitionItem;
 import com.team.supplychain.models.User;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -367,6 +370,9 @@ public class ManagerPurchaseOrdersController {
                     );
 
                     if (success) {
+                        // Update inventory quantities after approval
+                        updateInventoryFromApprovedRequisition(requisitionId);
+
                         po.setStatus("Approved");
                         po.setSelected(false);
                         successCount++;
@@ -472,6 +478,9 @@ public class ManagerPurchaseOrdersController {
             );
 
             if (success) {
+                // Update inventory quantities after approval
+                updateInventoryFromApprovedRequisition(requisitionId);
+
                 // Update UI
                 po.setStatus("Approved");
                 purchaseOrdersTable.refresh();
@@ -483,6 +492,63 @@ public class ManagerPurchaseOrdersController {
         } catch (Exception e) {
             e.printStackTrace();
             showError("Error", "Failed to approve requisition: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Increases inventory quantities based on approved requisition items
+     * This is called after a requisition is approved to update stock levels
+     *
+     * @param requisitionId The ID of the approved requisition
+     */
+    private void updateInventoryFromApprovedRequisition(Integer requisitionId) {
+        try {
+            // Get requisition with all items
+            Requisition requisition = requisitionDAO.getRequisitionById(requisitionId);
+            if (requisition == null || requisition.getItems() == null) {
+                System.err.println("Could not retrieve requisition " + requisitionId + " for inventory update");
+                return;
+            }
+
+            InventoryDAO inventoryDAO = new InventoryDAO();
+            int itemsUpdated = 0;
+            int itemsNotFound = 0;
+
+            // Process each requisition item
+            for (RequisitionItem reqItem : requisition.getItems()) {
+                // Try to find matching inventory item by name
+                InventoryItem inventoryItem = inventoryDAO.findInventoryItemByName(reqItem.getItemName());
+
+                if (inventoryItem != null) {
+                    // Item exists in inventory - increase quantity
+                    boolean increased = inventoryDAO.increaseInventoryQuantity(
+                        inventoryItem.getItemId(),
+                        reqItem.getQuantity()
+                    );
+
+                    if (increased) {
+                        System.out.println("Increased inventory: " + reqItem.getItemName() +
+                                         " by " + reqItem.getQuantity() + " units (New quantity: " +
+                                         (inventoryItem.getQuantity() + reqItem.getQuantity()) + ")");
+                        itemsUpdated++;
+                    } else {
+                        System.err.println("Failed to increase inventory for: " + reqItem.getItemName());
+                    }
+                } else {
+                    // Item doesn't exist in inventory yet
+                    System.out.println("Note: '" + reqItem.getItemName() +
+                                     "' not found in inventory. Requisition approved but inventory not updated for this item.");
+                    itemsNotFound++;
+                }
+            }
+
+            System.out.println("Inventory update complete: " + itemsUpdated + " items updated, " +
+                             itemsNotFound + " items not found in inventory");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error updating inventory from requisition " + requisitionId + ": " + e.getMessage());
+            // Don't fail the approval if inventory update fails - just log the error
         }
     }
 

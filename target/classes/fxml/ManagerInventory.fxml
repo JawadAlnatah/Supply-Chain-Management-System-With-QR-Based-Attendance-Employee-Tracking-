@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.chart.*?>
 
 <VBox xmlns="http://javafx.com/javafx/21.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
@@ -204,6 +205,49 @@
             </HBox>
         </VBox>
     </GridPane>
+
+    <!-- Inventory Distribution Chart -->
+    <VBox spacing="15" styleClass="stat-card-modern">
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
+        <style>
+            -fx-background-color: white;
+            -fx-background-radius: 15px;
+            -fx-border-color: #e0e0e0;
+            -fx-border-width: 1px;
+            -fx-border-radius: 15px;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 12, 0, 0, 3);
+        </style>
+
+        <!-- Chart Header -->
+        <Label text="Inventory Distribution by Category" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="20"/>
+            </font>
+            <style>
+                -fx-text-fill: #2c3e50;
+            </style>
+        </Label>
+
+        <!-- Bar Chart -->
+        <BarChart fx:id="inventoryChart" prefHeight="300" animated="true" legendVisible="false">
+            <xAxis>
+                <CategoryAxis fx:id="categoryAxis" label="Category" side="BOTTOM">
+                    <tickLabelFont>
+                        <Font size="11"/>
+                    </tickLabelFont>
+                </CategoryAxis>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="quantityAxis" label="Total Quantity" side="LEFT" autoRanging="true">
+                    <tickLabelFont>
+                        <Font size="11"/>
+                    </tickLabelFont>
+                </NumberAxis>
+            </yAxis>
+        </BarChart>
+    </VBox>
 
     <!-- Inventory Table Card -->
     <VBox spacing="15" styleClass="stat-card-modern">

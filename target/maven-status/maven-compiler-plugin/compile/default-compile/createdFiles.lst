@@ -4,10 +4,10 @@ com\team\supplychain\models\Attendance.class
 com\team\supplychain\controllers\EmployeeCreateRequisitionViewController$InventoryItemData.class
 com\team\supplychain\dao\RequisitionDAO.class
 com\team\supplychain\controllers\EmployeeCreateRequisitionViewController$RequisitionItem.class
-com\team\supplychain\controllers\ManagerEmployeesController$Employee.class
 com\team\supplychain\dao\InventoryDAO.class
+com\team\supplychain\controllers\ManagerInventoryController$4.class
+com\team\supplychain\controllers\ManagerAttendanceController$3.class
 com\team\supplychain\controllers\AdminAuditLogsController$1.class
-com\team\supplychain\controllers\ManagerInventoryController$InventoryItem.class
 com\team\supplychain\dao\SupplierDAO.class
 com\team\supplychain\controllers\AdminReportsController$3.class
 com\team\supplychain\controllers\EmployeeAttendanceViewController.class
@@ -61,6 +61,7 @@ com\team\supplychain\controllers\EmployeeCreateRequisitionViewController$2.class
 com\team\supplychain\controllers\AdminUserManagementController$2.class
 com\team\supplychain\controllers\EmployeeAttendanceViewController$AttendanceData.class
 com\team\supplychain\controllers\AttendanceController.class
+com\team\supplychain\utils\AddInventoryItems.class
 com\team\supplychain\controllers\EmployeeController.class
 com\team\supplychain\controllers\AdminSecurityController$4.class
 com\team\supplychain\dao\AttendanceDAO$AttendanceStatistics.class
@@ -71,17 +72,16 @@ com\team\supplychain\controllers\ManagerEmployeesController$1.class
 com\team\supplychain\controllers\ManagerPurchaseOrdersController$PurchaseOrder.class
 com\team\supplychain\controllers\EmployeeAttendanceViewController$1.class
 com\team\supplychain\controllers\EmployeeRequisitionsViewController$1.class
+com\team\supplychain\controllers\ManagerInventoryController$3.class
 com\team\supplychain\controllers\EmployeeDashboardController$DashboardData.class
 com\team\supplychain\controllers\AdminReportsController$2.class
 com\team\supplychain\controllers\ManagerDashboardController.class
 com\team\supplychain\controllers\ManagerEmployeesController.class
-com\team\supplychain\controllers\ManagerAttendanceController$AttendanceRecord.class
 com\team\supplychain\models\Requisition.class
 com\team\supplychain\controllers\AdminSecurityController$3.class
 com\team\supplychain\controllers\InventoryController.class
 com\team\supplychain\controllers\AdminSystemSettingsController$1.class
 com\team\supplychain\controllers\ManagerPurchaseOrdersController.class
-com\team\supplychain\controllers\ManagerEmployeesController$2.class
 com\team\supplychain\test\java\com\supplychain\test\TestConnection.class
 com\team\supplychain\controllers\AdminReportsController$1.class
 com\team\supplychain\controllers\ManagerInventoryController.class
@@ -92,6 +92,7 @@ com\team\supplychain\controllers\LoginController$1.class
 com\team\supplychain\controllers\AdminDashboardController$DashboardMetrics.class
 com\team\supplychain\controllers\ManagerAttendanceController$1.class
 com\team\supplychain\models\Employee.class
+com\team\supplychain\controllers\ManagerInventoryController$5.class
 com\team\supplychain\controllers\AdminDashboardController.class
 com\team\supplychain\services\AuthenticationService.class
 com\team\supplychain\controllers\AdminDashboardController$1.class

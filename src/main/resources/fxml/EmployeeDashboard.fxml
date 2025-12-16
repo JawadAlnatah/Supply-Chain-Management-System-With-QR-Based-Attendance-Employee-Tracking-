@@ -175,6 +175,20 @@
                     </graphic>
                 </Button>
 
+                <!-- Inventory Button -->
+                <Button fx:id="inventoryButton" styleClass="menu-button-modern" onAction="#handleInventory" maxWidth="Infinity" alignment="CENTER_LEFT">
+                    <graphic>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="📦" styleClass="menu-icon" style="-fx-font-size: 18px;"/>
+                            <Label text="Inventory">
+                                <font>
+                                    <Font size="13.0" />
+                                </font>
+                            </Label>
+                        </HBox>
+                    </graphic>
+                </Button>
+
                 <Region styleClass="menu-separator" prefHeight="1" maxHeight="1">
                     <VBox.margin>
                         <Insets top="10" bottom="10"/>
