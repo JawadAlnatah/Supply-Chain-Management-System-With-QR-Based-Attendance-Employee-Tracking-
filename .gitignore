@@ -88,3 +88,9 @@ keystore.p12
 
 # Test output
 test-output/
+
+# Loose files in root directory
+/mvn
+/*.class
+/*.java
+/*.sql
