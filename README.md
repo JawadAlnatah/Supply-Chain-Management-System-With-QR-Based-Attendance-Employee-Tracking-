@@ -2,9 +2,9 @@
 
 > A comprehensive JavaFX enterprise application featuring role-based access control, real-time inventory management, and automated attendance tracking
 
-**Developer:** Jawad Ali Alnatah
-**Technologies:** Java 17, JavaFX, Maven, MySQL/TiDB Cloud, BCrypt
-**Architecture:** MVC Pattern with DAO Layer
+- **Developer:** Jawad Ali Alnatah
+- **Technologies:** Java 17, JavaFX, Maven, MySQL/TiDB Cloud, BCrypt
+- **Architecture:** MVC Pattern with DAO Layer
 
 ---
 
@@ -20,7 +20,7 @@ An enterprise-grade desktop application that streamlines supply chain operations
 - Maintains complete audit trails for security compliance
 - Generates exportable reports (CSV format)
 
-**Why I built it:**
+**Why I built it:**  
 To demonstrate enterprise software development skills including secure authentication, database design, async UI programming, and implementing real-world business logic for supply chain and HR management.
 
 ---
@@ -140,7 +140,6 @@ To demonstrate enterprise software development skills including secure authentic
 ## System Architecture
 
 ### Layered Architecture Overview
-
 ```
 ┌─────────────────────────────────────────┐
 │     PRESENTATION LAYER (JavaFX)         │
@@ -198,7 +197,6 @@ To demonstrate enterprise software development skills including secure authentic
 - Internet connection (for database access)
 
 ### Installation
-
 ```bash
 # 1. Clone the repository
 git clone https://github.com/JawadAlnatah/Integrated-Supply-Chain-Management-System-with-QR-Based-Employee-Attendance-Tracking-.git
@@ -309,7 +307,6 @@ src/main/resources/config.properties
 ---
 
 ## Common Maven Commands
-
 ```bash
 # Clean build directory
 mvn clean
@@ -367,13 +364,10 @@ mvn javafx:run
 
 ## Repository & License
 
-**GitHub Repository**: [View Source Code](https://github.com/JawadAlnatah/Integrated-Supply-Chain-Management-System-with-QR-Based-Employee-Attendance-Tracking-)
-
-**License**: This project was developed as part of academic coursework at Imam Abdulrahman Bin Faisal University. Free to use for educational and portfolio purposes.
-
-**Developer**: Jawad Ali Alnatah
-**Contact**: Jawad.Alnatah@gmail.com
-
+- **GitHub Repository**: [View Source Code](https://github.com/JawadAlnatah/Integrated-Supply-Chain-Management-System-with-QR-Based-Employee-Attendance-Tracking-)
+- **License**: This project was developed as part of academic coursework at Imam Abdulrahman Bin Faisal University. Free to use for educational and portfolio purposes.
+- **Developer**: Jawad Ali Alnatah
+- **Contact**: Jawad.Alnatah@gmail.com
 
 ---
 
@@ -387,10 +381,9 @@ Developed as part of CSC 305: Software Engineering course demonstrating:
 - Documentation (SPMP, SRS, SDD)
 - Testing and quality assurance
 
-**Advisor**: Saeed Matar Alshahrani
-**Institution**: Imam Abdulrahman Bin Faisal University
-**College**: Computer Science and Information Technology
+- **Advisor**: Saeed Matar Alshahrani
+- **Institution**: Imam Abdulrahman Bin Faisal University
+- **College**: Computer Science and Information Technology
 
 ---
 
-*Last Updated: January 2025*
