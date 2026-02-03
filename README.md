@@ -140,44 +140,7 @@ To demonstrate enterprise software development skills including secure authentic
 ## System Architecture
 
 ### Layered Architecture Overview
-```
-┌─────────────────────────────────────────┐
-│     PRESENTATION LAYER (JavaFX)         │
-│  ┌──────────┐  ┌──────────┐  ┌───────┐  │
-│  │ FXML     │  │ CSS       │ │ Assets│  │
-│  │ Views    │  │ Styles    │ │ Images│  │
-│  └──────────┘  └──────────┘  └───────┘  │
-└─────────────────────────────────────────┘
-                    ↕
-┌─────────────────────────────────────────┐
-│     CONTROLLER LAYER (Business Logic)   │
-│  - AdminDashboardController             │
-│  - ManagerInventoryController           │
-│  - EmployeeAttendanceViewController     │
-│  - LoginController                      │
-└─────────────────────────────────────────┘
-                    ↕
-┌─────────────────────────────────────────┐
-│     DATA ACCESS LAYER (DAO Pattern)     │
-│  - UserDAO         - InventoryDAO       │
-│  - AttendanceDAO   - RequisitionDAO     │
-│  - AuditLogDAO     - EmployeeDAO        │
-└─────────────────────────────────────────┘
-                    ↕
-┌─────────────────────────────────────────┐
-│     DOMAIN MODEL LAYER (POJOs)          │
-│  - User            - InventoryItem      │
-│  - Employee        - Requisition        │
-│  - AuditLog        - AttendanceRecord   │
-└─────────────────────────────────────────┘
-                    ↕
-┌─────────────────────────────────────────┐
-│   DATABASE LAYER (TiDB Cloud/MySQL)     │
-│  - users           - inventory_items    │
-│  - employees       - attendance_records │
-│  - audit_logs      - requisitions       │
-└─────────────────────────────────────────┘
-```
+<img width="799" height="897" alt="image" src="https://github.com/user-attachments/assets/dd4ded09-4288-4176-9cbd-0e3a423f44dc" />
 
 **Key Design Patterns:**
 - **MVC (Model-View-Controller)**: Separation of concerns between UI and logic
